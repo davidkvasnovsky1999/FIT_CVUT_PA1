@@ -1,0 +1,1 @@
+/usr/bin/cc -g   CMakeFiles/homeworks.dir/homeworks/03_hard/03_hard_v1.c.o  -o homeworks 

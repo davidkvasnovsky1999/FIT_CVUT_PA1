@@ -1,0 +1,3 @@
+/home/david/FIT/PA1/homeworks/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/david/FIT/PA1/homeworks/cmake-build-debug/CMakeFiles/homeworks.dir
+/home/david/FIT/PA1/homeworks/cmake-build-debug/CMakeFiles/edit_cache.dir

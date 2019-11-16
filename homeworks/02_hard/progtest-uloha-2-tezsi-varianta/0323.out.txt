@@ -1,0 +1,4 @@
+Vstupni intervaly:
+Celkem: -1433190126
+Celkem: -1277769840
+Nespravny vstup.

@@ -1,0 +1,4 @@
+Vstupni intervaly:
+Celkem: -636384064
+Celkem: -74400
+Celkem: 5803220664

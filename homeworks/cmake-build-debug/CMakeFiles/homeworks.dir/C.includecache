@@ -1,0 +1,16 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/david/FIT/PA1/homeworks/02_hard/02_hard_v1.c
+stdio.h
+-
+stdlib.h
+-
+string.h
+-
+
