@@ -7,11 +7,10 @@ int main ( void )
 //	a = a + b;
 //	b = a - b;
 //	a = a - b;
-	int x;
-	if ( x == 27 && 6 )
-	{
-	
-	}
-	printf ( "%d\n", 27 && 6 );
+unsigned long long ull = 0;
+	if ( scanf ( "%llu", &ull ) == 1 )
+	    printf ( "%llu\n", ull );
+	else
+        printf ( "Error\n" );
 	return 0;
 }
