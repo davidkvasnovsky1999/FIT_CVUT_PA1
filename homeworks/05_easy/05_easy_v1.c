@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int                  readAndAllocateFirstRow   ( int           * numberOfColumns,
-                                                 char         ** playingArea )
+int                     readAndAllocateFirstRow   ( int           * numberOfColumns,
+                                                    char         ** playingArea )
 {
     *numberOfColumns = 0;
     int ret = 0, numberOfAllocatedFields = 16;
@@ -14,12 +14,12 @@ int                  readAndAllocateFirstRow   ( int           * numberOfColumns
         {
             if ( ret == 1 && ( readChar == '*' || readChar == '.' ) )
             {
-                if ( *numberOfColumns >= numberOfAllocatedFields )
+                if ( ++ ( *numberOfColumns ) > numberOfAllocatedFields )
                 {
                     numberOfAllocatedFields *= 2;
                     *playingArea = ( char * ) realloc ( *playingArea, numberOfAllocatedFields * sizeof ( char ) );
                 }
-                *playingArea [ ( *numberOfColumns ) ++ ] = readChar;
+                *( ( *playingArea ) + ( *numberOfColumns ) - 1 ) = readChar;
             }
             else
             {
@@ -29,8 +29,8 @@ int                  readAndAllocateFirstRow   ( int           * numberOfColumns
         }
         if ( *numberOfColumns == 0 || ret == 0 )
         {
-            *playingArea = NULL;
             free ( *playingArea );
+            *playingArea = NULL;
             *numberOfColumns = 0;
         }
         else
@@ -39,9 +39,9 @@ int                  readAndAllocateFirstRow   ( int           * numberOfColumns
     return ret;
 }
 
-int                 readLine                    ( int             rowNumber,
-                                                  int             numberOfColumns,
-                                                  char         ** playingArea )
+int                     readLine                    ( int             rowNumber,
+                                                      int             numberOfColumns,
+                                                      char         ** playingArea )
 {
     int ret = 0, numberOfReadValidChars = 0;
     if ( playingArea != NULL && *playingArea != NULL )
@@ -50,7 +50,7 @@ int                 readLine                    ( int             rowNumber,
         while ( EOF != ( ret = scanf ( "%c", &readChar ) ) && readChar != '\n' )
         {
             if ( ret == 1 && ( readChar == '*' || readChar == '.' ) && ( ++ numberOfReadValidChars <= numberOfColumns ) )
-                *playingArea [ rowNumber * numberOfColumns + numberOfReadValidChars - 1 ] = readChar;
+                *( ( *playingArea ) + ( rowNumber * numberOfColumns ) + numberOfReadValidChars - 1 ) = readChar;
             else
             {
                 ret = 0;
@@ -68,25 +68,29 @@ int                 readLine                    ( int             rowNumber,
 
 
 
-int                 getPlayingAreaFromInput     ( char         ** playingArea,
-                                                  int           * numberOfRows,
-                                                  int           * numberOfColumns )
+int                     getPlayingAreaFromInput     ( char         ** playingArea,
+                                                      int           * numberOfRows,
+                                                      int           * numberOfColumns )
 // Returns list of read unsigned integers. Returns NULL if an error occurred or no number was read.
 {
     *playingArea = NULL;
     if ( readAndAllocateFirstRow ( numberOfColumns, playingArea ) )
     {
-        *numberOfRows = 1;
-        int numberOfAllocatedRows = 32;
+        *numberOfRows = 0;
+        int numberOfAllocatedRows = 32, ret = 0;
         *playingArea = ( char * ) realloc ( *playingArea, *numberOfColumns * numberOfAllocatedRows * sizeof ( char ) );
-        while ( readLine ( *numberOfRows, *numberOfColumns, playingArea ) )
+        do
         {
-            if ( ( *numberOfRows ) ++ >= numberOfAllocatedRows )
+            if ( ++ ( *numberOfRows ) >= numberOfAllocatedRows )
             {
                 numberOfAllocatedRows *= 2;
                 *playingArea = ( char * ) realloc ( *playingArea, *numberOfColumns * numberOfAllocatedRows * sizeof ( char ) );
             }
+            ret = readLine ( ( *numberOfRows ) - 1, *numberOfColumns, playingArea );
+            if ( ret == 0 )
+                return 0;
         }
+        while ( ret != EOF );
         return 1;
     }
     return 0;
@@ -95,7 +99,7 @@ int                 getPlayingAreaFromInput     ( char         ** playingArea,
 
 
 
-int                 main                        ( void )
+int                     main                        ( void )
 {
     char * playingArea = NULL;
     int numberOfRows, numberOfColumns;

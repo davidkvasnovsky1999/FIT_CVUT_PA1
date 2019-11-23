@@ -1,12 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define MAX_NUM_OF_PARTS 500000;
+#define MAX_NUM_OF_PARTS ( ( int ) 500000 )
 
 typedef struct {
     unsigned size; // Current size of min heap
     unsigned capacity; // capacity of min heap
-    long long * harr; // Array of min heap nodes
+    long long * arrayOfNodes; // Array of min heap nodes
 } MinHeap;
 
 int                 getPartsLengthsFromInput    ( long long    ** partsLengths )
@@ -17,16 +17,16 @@ int                 getPartsLengthsFromInput    ( long long    ** partsLengths )
     int arraySize = 32, ret = 0, numberOfParts = 0;
     *partsLengths = ( long long * ) malloc ( arraySize * sizeof ( long long ) );
     long long readNumber = 0;
-    while ( EOF != ( ret = scanf ( " %lld ", &readNumber ) ) )
+    while ( EOF != ( ret = scanf ( "%lld", &readNumber ) ) )
     {
-        if ( ret == 1 && readNumber > 0 && numberOfParts ++ <= MAX_NUM_OF_PARTS )
+        if ( ret == 1 && readNumber > 0 && ( numberOfParts ++ ) <= MAX_NUM_OF_PARTS )
         {
             if ( numberOfParts >= arraySize )
             {
                 arraySize *= 2;
                 *partsLengths = ( long long * ) realloc ( *partsLengths, arraySize * sizeof ( long long ) );
             }
-            *( ( *partsLengths ) + numberOfParts ) = readNumber;
+            *( ( *partsLengths ) + ( numberOfParts - 1 ) ) = readNumber;
         }
         else
         {
@@ -48,10 +48,10 @@ int                 getPartsLengthsFromInput    ( long long    ** partsLengths )
 // A utility function to create a min heap of given capacity
 MinHeap*            createMinHeap               ( unsigned          capacity )
 {
-    MinHeap* minHeap = new MinHeap;
-    minHeap->size = 0; // current size is 0
+    MinHeap* minHeap = ( MinHeap * ) malloc ( sizeof ( MinHeap ) );
+    minHeap->size = 0;
     minHeap->capacity = capacity;
-    minHeap->harr = new int[capacity];
+    minHeap->arrayOfNodes = ( long long * ) malloc ( capacity * sizeof ( long long ) );
     return minHeap;
 }
 
@@ -66,54 +66,48 @@ void                swapMinHeapNode             ( long long       * a,
 
 // The standard minHeapify function.
 void                minHeapify                  ( MinHeap         * minHeap,
-                                                  long long         idx )
+                                                  const long long   index )
 {
-    int smallest = idx;
-    int left = 2 * idx + 1;
-    int right = 2 * idx + 2;
+    long long smallest = index;
+    long long left     = 2 * index + 1;
+    long long right    = 2 * index + 2;
     
-    if (left < minHeap->size && minHeap->harr[left] < minHeap->harr[smallest])
+    if ( left  < minHeap->size && minHeap->arrayOfNodes [ left ]  < minHeap->arrayOfNodes [ smallest ] )
         smallest = left;
     
-    if (right < minHeap->size && minHeap->harr[right] < minHeap->harr[smallest])
+    if ( right < minHeap->size && minHeap->arrayOfNodes [ right ] < minHeap->arrayOfNodes [ smallest ] )
         smallest = right;
-    
-    if (smallest != idx) {
-        swapMinHeapNode(&minHeap->harr[smallest], &minHeap->harr[idx]);
-        minHeapify(minHeap, smallest);
+        
+    if ( smallest != index ) {
+        swapMinHeapNode ( &minHeap->arrayOfNodes [ smallest ], &minHeap->arrayOfNodes [ index ] );
+        minHeapify ( minHeap, smallest );
     }
-}
-
-// A utility function to check if size of heap is 1 or not
-int                 isSizeOne                   ( MinHeap         * minHeap )
-{
-    return (minHeap->size == 1);
 }
 
 // A standard function to extract minimum value node from heap
 long long           extractMin                  ( MinHeap         * minHeap )
 {
-    long long temp = minHeap->harr[0];
-    minHeap->harr[0] = minHeap->harr[minHeap->size - 1];
-    --minHeap->size;
-    minHeapify(minHeap, 0);
+    long long temp = minHeap->arrayOfNodes [ 0 ];
+    minHeap->arrayOfNodes [ 0 ] = minHeap->arrayOfNodes [ minHeap->size - 1 ];
+    -- minHeap->size;
+    minHeapify ( minHeap, 0 );
     return temp;
 }
 
 // A utility function to insert a new node to Min Heap
 void                insertMinHeap               ( MinHeap         * minHeap,
-                                                  long long         val )
+                                                  const long long   value )
 {
     ++ minHeap->size;
     long long i = minHeap->size - 1;
-    while ( i && ( val < minHeap->harr [ ( i - 1 ) / 2 ] ) ) {
-        minHeap->harr [ i ] = minHeap->harr [ ( i - 1 ) / 2 ];
+    while ( i && ( value < minHeap->arrayOfNodes [ ( i - 1 ) / 2 ] ) ) {
+        minHeap->arrayOfNodes [ i ] = minHeap->arrayOfNodes [ ( i - 1 ) / 2 ];
         i = ( i - 1 ) / 2;
     }
-    minHeap->harr [ i ] = val;
+    minHeap->arrayOfNodes [ i ] = value;
 }
 
-// A standard funvtion to build min heap
+// A standard function to build min heap
 void                buildMinHeap                ( MinHeap         * minHeap )
 {
     long long n = minHeap->size - 1;
@@ -123,40 +117,33 @@ void                buildMinHeap                ( MinHeap         * minHeap )
 }
 
 // Creates a min heap of capacity equal to size and inserts all values
-// from len[] in it. Initially size of min heap is equal to capacity
+// from *length in it. Initially size of min heap is equal to capacity
 MinHeap*            createAndBuildMinHeap       ( const long long * length,
-                                                  int               size )
+                                                  const int         size )
 {
     MinHeap * minHeap = createMinHeap ( size );
     for ( int i = 0; i < size; ++ i )
-        minHeap->harr [ i ] = length [ i ];
+        minHeap->arrayOfNodes [ i ] = length [ i ];
     minHeap->size = size;
     buildMinHeap ( minHeap );
     return minHeap;
 }
 
-// The main function that returns the minimum cost to connect n ropes of
-// lengths stored in len[0..n-1]
-long long           minCost                     ( long long       * len,
-                                                  int               n )
+// The main function that returns the minimum cost to connect n parts of lengths stored in partsLengths
+long long           minCost                     ( const long long * partsLengths,
+                                                  const int         partsCount )
 {
-    long long cost = 0; // Initialize result
-    // Create a min heap of capacity equal to n and put all ropes in it
-    MinHeap * minHeap = createAndBuildMinHeap ( len, n );
-    // Iterate while size of heap doesn't become 1
-    while ( !isSizeOne ( minHeap ) ) {
+    long long minCost = 0;
+    MinHeap * minHeap = createAndBuildMinHeap ( partsLengths, partsCount );
+    while ( minHeap->size != 1 )
+    {
         // Extract two minimum length ropes from min heap
         long long min       = extractMin ( minHeap );
         long long sec_min   = extractMin ( minHeap );
-        
-        cost += ( min + sec_min ); // Update total cost
-        
-        // Insert a new rope in min heap with length equal to sum
-        // of two extracted minimum lengths
+        minCost += ( min + sec_min );
         insertMinHeap ( minHeap, min + sec_min );
     }
-    // Finally return total minimum cost for connecting all ropes
-    return cost;
+    return minCost;
 }
 
 
@@ -164,8 +151,8 @@ int                 main                        ( void )
 {
     printf ( "Zadejte delky:\n" );
     long long * partsLengths = NULL;
-    int partsCount = 0;
-    if ( ( partsCount = getPartsLengthsFromInput ( &partsLengths ) ) )
+    int partsCount = getPartsLengthsFromInput ( &partsLengths );
+    if ( partsCount > 0 )
     {
 //        for ( int i = 0; i < partsCount; i ++ )
 //            printf ( "%lld ", partsLengths [ i ] );
