@@ -82,10 +82,7 @@
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="/home/david/CLionProjects/PA1/homeworks/05_easy/05_easy_v1.c">
-			<Option target="homeworks"/>
-		</Unit>
-		<Unit filename="/home/david/CLionProjects/PA1/homeworks/05_hard/05_hard-v1.c">
+		<Unit filename="/home/david/CLionProjects/PA1/homeworks/05_hard/05_hard_v1.c">
 			<Option target="homeworks"/>
 		</Unit>
 		<Unit filename="/home/david/CLionProjects/PA1/CMakeLists.txt">

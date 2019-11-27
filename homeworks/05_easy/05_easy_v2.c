@@ -1,27 +1,12 @@
-//Program does not work
-
+//Program works properly
 #include <stdio.h>
 #include <stdlib.h>
-
-#define PLAYING_AREA_CHARS ".12345678*"
-
-const char * playingAreaChars = PLAYING_AREA_CHARS;
 
 typedef struct
 {
     unsigned long long numberOfColumns, numberOfRows, numberOfMines;
-    char ** playingAreaValues;
+    unsigned char * playingAreaValues;
 } PlayingArea;
-
-
-
-int                     getIndexOf                ( const char            playingAreaChar )
-{
-    if ( playingAreaChar == '*' )
-        return 9;
-    else
-        return 0;
-}
 
 int                     readAndAllocateFirstRow   ( PlayingArea         * playingArea )
 {
@@ -30,18 +15,23 @@ int                     readAndAllocateFirstRow   ( PlayingArea         * playin
     {
         unsigned long long numberOfAllocatedFields = 16;
         playingArea->numberOfColumns = 0;
-        playingArea->playingAreaValues = ( char ** ) malloc ( numberOfAllocatedFields * sizeof ( char * ) );
+        playingArea->playingAreaValues = ( unsigned char * ) malloc ( ( size_t ) numberOfAllocatedFields * sizeof ( unsigned char ) );
         char readChar = 0;
-        while ( ( ret = scanf ( "%c", &readChar ) ) && readChar != '\n' )
+        while ( EOF != ( ret = scanf ( "%c", &readChar ) ) && readChar != '\n' )
         {
             if ( ret == 1 && ( readChar == '*' || readChar == '.' ) )
             {
                 if ( ++ ( playingArea->numberOfColumns ) > numberOfAllocatedFields )
                 {
                     numberOfAllocatedFields *= 2;
-                    playingArea->playingAreaValues = ( char ** ) realloc ( playingArea->playingAreaValues, numberOfAllocatedFields * sizeof ( char * ) );
+                    playingArea->playingAreaValues = ( unsigned char * ) realloc (  playingArea->playingAreaValues, ( size_t ) numberOfAllocatedFields * sizeof ( unsigned char ) );
+//                    if ( ! playingArea->playingAreaValues )
+//                    {
+//                        free ( playingArea->playingAreaValues );
+//                        return 0;
+//                    }
                 }
-                *( playingArea->playingAreaValues + ( playingArea->numberOfColumns ) - 1 ) = ( char * ) ( playingAreaChars + getIndexOf ( readChar ) );
+                *( playingArea->playingAreaValues + ( playingArea->numberOfColumns ) - 1 ) = readChar;
             }
             else
             {
@@ -58,25 +48,36 @@ int                     readAndAllocateFirstRow   ( PlayingArea         * playin
         }
         else
         {
-            playingArea->playingAreaValues = ( char ** ) realloc ( playingArea->playingAreaValues, playingArea->numberOfColumns * sizeof ( char * ) );
+            playingArea->playingAreaValues = ( unsigned char * ) realloc ( playingArea->playingAreaValues, ( size_t ) playingArea->numberOfColumns * sizeof ( unsigned char ) );
             playingArea->numberOfRows = 1;
         }
     }
     return ret;
 }
 
-int                     readLine                    ( unsigned long long      rowNumber,
-                                                      PlayingArea           * playingArea )
+int                     readNextLines               ( PlayingArea           * playingArea )
 {
     int ret = 0;
-    unsigned long long numberOfReadValidChars = 0;
     if ( playingArea != NULL && playingArea->playingAreaValues != NULL )
     {
-        char readChar;
-        while ( EOF != ( ret = scanf ( "%c", &readChar ) ) && readChar != '\n' && readChar != 'k' )
+        unsigned long long numberOfReadValidChars = 0, numberOfAllocatedRows = 32, indexOfCurrentlyUsedRow = playingArea->numberOfRows - 1;
+        playingArea->playingAreaValues = ( unsigned char * ) realloc ( playingArea->playingAreaValues, ( size_t ) playingArea->numberOfColumns * numberOfAllocatedRows * sizeof ( unsigned char ) );
+        unsigned char readChar = 0;
+        while ( EOF != ( ret = scanf ( "%c", &readChar ) ) )
         {
-            if ( ret == 1 && ( readChar == '*' || readChar == '.' ) && ( ++ numberOfReadValidChars <= playingArea->numberOfColumns ) )
-                *( playingArea->playingAreaValues + ( rowNumber * playingArea->numberOfColumns ) + numberOfReadValidChars - 1 ) = ( char * ) ( playingAreaChars + getIndexOf ( readChar ) );
+            if      ( ret == 1 && ( readChar == '*' || readChar == '.' ) && ( ++ numberOfReadValidChars <= playingArea->numberOfColumns ) )
+            {
+                if ( numberOfReadValidChars == 1 )
+                    indexOfCurrentlyUsedRow ++;
+                if ( indexOfCurrentlyUsedRow + 1 >= numberOfAllocatedRows )
+                {
+                    numberOfAllocatedRows *= 2;
+                    playingArea->playingAreaValues = ( unsigned char * ) realloc ( playingArea->playingAreaValues, ( size_t ) playingArea->numberOfColumns * numberOfAllocatedRows * sizeof ( unsigned char ) );
+                }
+                *( playingArea->playingAreaValues + ( indexOfCurrentlyUsedRow * playingArea->numberOfColumns ) + numberOfReadValidChars - 1 ) = readChar;
+            }
+            else if ( ret == 1 && readChar == '\n' && numberOfReadValidChars == playingArea->numberOfColumns )
+                numberOfReadValidChars = 0;
             else
             {
                 ret = 0;
@@ -88,41 +89,17 @@ int                     readLine                    ( unsigned long long      ro
             free ( playingArea->playingAreaValues );
             playingArea->playingAreaValues = NULL;
         }
-        if ( readChar == 'k' ) ret = EOF;
+        else
+            playingArea->numberOfRows = indexOfCurrentlyUsedRow + 1;
     }
     return ret;
 }
-
-int                     getPlayingAreaFromInput     ( PlayingArea           * playingArea )
-{
-    if ( playingArea != NULL && readAndAllocateFirstRow ( playingArea ) )
-    {
-        unsigned long long numberOfAllocatedRows = 32;
-        int ret = 0;
-        playingArea->playingAreaValues = ( char ** ) realloc ( playingArea->playingAreaValues, playingArea->numberOfColumns * numberOfAllocatedRows * sizeof ( char * ) );
-        while ( 1 )
-        {
-            if ( ( playingArea->numberOfRows ) ++ >= numberOfAllocatedRows )
-            {
-                numberOfAllocatedRows *= 2;
-                playingArea->playingAreaValues = ( char ** ) realloc ( playingArea->playingAreaValues, playingArea->numberOfColumns * numberOfAllocatedRows * sizeof ( char * ) );
-            }
-            ret = readLine ( ( playingArea->numberOfRows ) - 1, playingArea );
-            if      ( ret == 0 )
-                return 0;
-            else if ( ret == EOF )
-                return 1;
-        }
-    }
-    return 0;
-}
-
 
 int                     incrementPointersAroundMine ( PlayingArea           * playingArea,
                                                       unsigned long long      minesRowNumber,
                                                       unsigned long long      minesColumnNumber )
 {
-    if ( playingArea == NULL || minesColumnNumber >= playingArea->numberOfColumns || minesRowNumber >= playingArea->numberOfRows )
+    if ( playingArea == NULL || playingArea->playingAreaValues == NULL || minesColumnNumber >= playingArea->numberOfColumns || minesRowNumber >= playingArea->numberOfRows )
         return 0;
     int prevRow = -1, nextRow = 1, prevCol = -1, nextCol = 1;
     if ( minesColumnNumber  == 0 )                                  prevCol = 0;
@@ -133,14 +110,15 @@ int                     incrementPointersAroundMine ( PlayingArea           * pl
     {
         for ( int j = prevCol; j <= nextCol; j ++ )
         {
-            char ** ptr = playingArea->playingAreaValues + ( ( minesRowNumber + i ) * playingArea->numberOfColumns ) + minesColumnNumber + j;
-            if ( **ptr != '*' )
+            unsigned char * ptr = playingArea->playingAreaValues + ( ( minesRowNumber + i ) * playingArea->numberOfColumns ) + minesColumnNumber + j;
+            if      ( *ptr == '.' )
+                ( *ptr ) = '1';
+            else if ( *ptr != '*' )
                 ( *ptr ) ++;
         }
     }
     return 1;
 }
-
 
 int                     putNumbersIntoPlayingArea   ( PlayingArea           * playingArea )
 {
@@ -149,7 +127,7 @@ int                     putNumbersIntoPlayingArea   ( PlayingArea           * pl
     for ( unsigned long long i = 0; i < playingArea->numberOfRows; i ++ )
         for ( unsigned long long j = 0; j < playingArea->numberOfColumns; j ++ )
         {
-            if ( **( playingArea->playingAreaValues + i * playingArea->numberOfColumns + j ) == '*' )
+            if ( *( playingArea->playingAreaValues + i * playingArea->numberOfColumns + j ) == '*' )
                 incrementPointersAroundMine ( playingArea, i, j );
         }
     return 1;
@@ -162,27 +140,26 @@ void                    printPlayingArea            ( PlayingArea           * pl
         for ( unsigned long long i = 0; i < playingArea->numberOfRows; i ++ )
         {
             for ( unsigned long long j = 0; j < playingArea->numberOfColumns; j ++ )
-                printf ( "%c", **( playingArea->playingAreaValues + ( i * playingArea->numberOfColumns ) + j ) );
+                printf ( "%c", *( playingArea->playingAreaValues + ( i * playingArea->numberOfColumns ) + j ) );
             printf ( "\n" );
         }
     }
 }
 
-
 int                     main                        ( void )
 {
     PlayingArea * playingArea = ( PlayingArea * ) malloc ( sizeof ( PlayingArea ) );
     printf ( "Zadejte hraci plochu:\n" );
-    if ( getPlayingAreaFromInput ( playingArea ) )
+    if ( readAndAllocateFirstRow ( playingArea ) && readNextLines ( playingArea ) )
     {
+//        printPlayingArea ( playingArea );
+        putNumbersIntoPlayingArea ( playingArea );
+        printf ( "Vyplnena hraci plocha:\n" );
         printPlayingArea ( playingArea );
-//        putNumbersIntoPlayingArea ( &playingArea );
-//        printf ( "Vyplnena hraci plocha:\n" );
-//        printPlayingArea ( *playingArea );
         free ( playingArea->playingAreaValues );
-        free ( playingArea );
     }
     else
         printf ( "Nespravny vstup.\n" );
+    free ( playingArea );
     return 0;
 }

@@ -123,59 +123,32 @@ homeworks/fast:
 	$(MAKE) -f CMakeFiles/homeworks.dir/build.make CMakeFiles/homeworks.dir/build
 .PHONY : homeworks/fast
 
-homeworks/05_easy/05_easy_v1.o: homeworks/05_easy/05_easy_v1.c.o
+homeworks/05_hard/05_hard_v1.o: homeworks/05_hard/05_hard_v1.c.o
 
-.PHONY : homeworks/05_easy/05_easy_v1.o
-
-# target to build an object file
-homeworks/05_easy/05_easy_v1.c.o:
-	$(MAKE) -f CMakeFiles/homeworks.dir/build.make CMakeFiles/homeworks.dir/homeworks/05_easy/05_easy_v1.c.o
-.PHONY : homeworks/05_easy/05_easy_v1.c.o
-
-homeworks/05_easy/05_easy_v1.i: homeworks/05_easy/05_easy_v1.c.i
-
-.PHONY : homeworks/05_easy/05_easy_v1.i
-
-# target to preprocess a source file
-homeworks/05_easy/05_easy_v1.c.i:
-	$(MAKE) -f CMakeFiles/homeworks.dir/build.make CMakeFiles/homeworks.dir/homeworks/05_easy/05_easy_v1.c.i
-.PHONY : homeworks/05_easy/05_easy_v1.c.i
-
-homeworks/05_easy/05_easy_v1.s: homeworks/05_easy/05_easy_v1.c.s
-
-.PHONY : homeworks/05_easy/05_easy_v1.s
-
-# target to generate assembly for a file
-homeworks/05_easy/05_easy_v1.c.s:
-	$(MAKE) -f CMakeFiles/homeworks.dir/build.make CMakeFiles/homeworks.dir/homeworks/05_easy/05_easy_v1.c.s
-.PHONY : homeworks/05_easy/05_easy_v1.c.s
-
-homeworks/05_hard/05_hard-v1.o: homeworks/05_hard/05_hard-v1.c.o
-
-.PHONY : homeworks/05_hard/05_hard-v1.o
+.PHONY : homeworks/05_hard/05_hard_v1.o
 
 # target to build an object file
-homeworks/05_hard/05_hard-v1.c.o:
-	$(MAKE) -f CMakeFiles/homeworks.dir/build.make CMakeFiles/homeworks.dir/homeworks/05_hard/05_hard-v1.c.o
-.PHONY : homeworks/05_hard/05_hard-v1.c.o
+homeworks/05_hard/05_hard_v1.c.o:
+	$(MAKE) -f CMakeFiles/homeworks.dir/build.make CMakeFiles/homeworks.dir/homeworks/05_hard/05_hard_v1.c.o
+.PHONY : homeworks/05_hard/05_hard_v1.c.o
 
-homeworks/05_hard/05_hard-v1.i: homeworks/05_hard/05_hard-v1.c.i
+homeworks/05_hard/05_hard_v1.i: homeworks/05_hard/05_hard_v1.c.i
 
-.PHONY : homeworks/05_hard/05_hard-v1.i
+.PHONY : homeworks/05_hard/05_hard_v1.i
 
 # target to preprocess a source file
-homeworks/05_hard/05_hard-v1.c.i:
-	$(MAKE) -f CMakeFiles/homeworks.dir/build.make CMakeFiles/homeworks.dir/homeworks/05_hard/05_hard-v1.c.i
-.PHONY : homeworks/05_hard/05_hard-v1.c.i
+homeworks/05_hard/05_hard_v1.c.i:
+	$(MAKE) -f CMakeFiles/homeworks.dir/build.make CMakeFiles/homeworks.dir/homeworks/05_hard/05_hard_v1.c.i
+.PHONY : homeworks/05_hard/05_hard_v1.c.i
 
-homeworks/05_hard/05_hard-v1.s: homeworks/05_hard/05_hard-v1.c.s
+homeworks/05_hard/05_hard_v1.s: homeworks/05_hard/05_hard_v1.c.s
 
-.PHONY : homeworks/05_hard/05_hard-v1.s
+.PHONY : homeworks/05_hard/05_hard_v1.s
 
 # target to generate assembly for a file
-homeworks/05_hard/05_hard-v1.c.s:
-	$(MAKE) -f CMakeFiles/homeworks.dir/build.make CMakeFiles/homeworks.dir/homeworks/05_hard/05_hard-v1.c.s
-.PHONY : homeworks/05_hard/05_hard-v1.c.s
+homeworks/05_hard/05_hard_v1.c.s:
+	$(MAKE) -f CMakeFiles/homeworks.dir/build.make CMakeFiles/homeworks.dir/homeworks/05_hard/05_hard_v1.c.s
+.PHONY : homeworks/05_hard/05_hard_v1.c.s
 
 # Help Target
 help:
@@ -186,12 +159,9 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... homeworks"
 	@echo "... edit_cache"
-	@echo "... homeworks/05_easy/05_easy_v1.o"
-	@echo "... homeworks/05_easy/05_easy_v1.i"
-	@echo "... homeworks/05_easy/05_easy_v1.s"
-	@echo "... homeworks/05_hard/05_hard-v1.o"
-	@echo "... homeworks/05_hard/05_hard-v1.i"
-	@echo "... homeworks/05_hard/05_hard-v1.s"
+	@echo "... homeworks/05_hard/05_hard_v1.o"
+	@echo "... homeworks/05_hard/05_hard_v1.i"
+	@echo "... homeworks/05_hard/05_hard_v1.s"
 .PHONY : help
 
 
