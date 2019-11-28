@@ -1,1 +1,1 @@
-/usr/bin/cc -g   CMakeFiles/homeworks.dir/homeworks/05_hard/05_hard_v1.c.o  -o homeworks 
+/usr/bin/c++  -g   CMakeFiles/homeworks.dir/homeworks/05_hard/05_hard_v1.c.o CMakeFiles/homeworks.dir/homeworks/05_hard/closestPairOfPoints.cpp.o  -o homeworks 

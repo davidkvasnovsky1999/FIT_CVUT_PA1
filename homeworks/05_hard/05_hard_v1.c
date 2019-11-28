@@ -93,8 +93,9 @@ int                     getFlights              ( FlightsContainer ** flightsCon
     initFlightsContainer ( flightsContainer );
     int ret = 0;
     long double x, y;
+    unsigned char charForFormatCheck = 0;
     Flight * currentFlight;
-    while ( ( ret = scanf ( "[ %Lf , %Lf ]", &x, &y ) ) == 2 && ret != EOF )
+    while ( ( ret = scanf ( "[ %Lf , %Lf %c", &x, &y, &charForFormatCheck ) ) == 3 && ret != EOF && charForFormatCheck == ']' )
     {
         if ( ( *flightsContainer )->numberOfAllocatedFlights == ( *flightsContainer )->numberOfFlights + 1 )
         {
@@ -107,7 +108,7 @@ int                     getFlights              ( FlightsContainer ** flightsCon
         if ( readFlightsName ( *flightsContainer, currentFlight ) != 1 )
             return 0;
     }
-    if ( ret != EOF )
+    if ( ret != EOF || charForFormatCheck != ']' )
         return 0;
     return 1;
 }
