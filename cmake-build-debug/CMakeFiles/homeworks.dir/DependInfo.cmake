@@ -5,7 +5,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_C
-  "/home/kvasndav/FIT/PA1/homeworks/05_hard/05_hard_v1.c" "/home/kvasndav/FIT/PA1/cmake-build-debug/CMakeFiles/homeworks.dir/homeworks/05_hard/05_hard_v1.c.o"
+  "/home/david/CLionProjects/PA1/homeworks/05_hard/05_hard_v1.c" "/home/david/CLionProjects/PA1/cmake-build-debug/CMakeFiles/homeworks.dir/homeworks/05_hard/05_hard_v1.c.o"
   )
 set(CMAKE_C_COMPILER_ID "GNU")
 
@@ -13,7 +13,7 @@ set(CMAKE_C_COMPILER_ID "GNU")
 set(CMAKE_C_TARGET_INCLUDE_PATH
   )
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/kvasndav/FIT/PA1/homeworks/05_hard/closestPairOfPoints.cpp" "/home/kvasndav/FIT/PA1/cmake-build-debug/CMakeFiles/homeworks.dir/homeworks/05_hard/closestPairOfPoints.cpp.o"
+  "/home/david/CLionProjects/PA1/homeworks/05_hard/closestPairOfPoints.cpp" "/home/david/CLionProjects/PA1/cmake-build-debug/CMakeFiles/homeworks.dir/homeworks/05_hard/closestPairOfPoints.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
