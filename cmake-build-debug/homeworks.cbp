@@ -85,9 +85,6 @@
 		<Unit filename="/home/david/CLionProjects/PA1/homeworks/05_hard/05_hard_v1.c">
 			<Option target="homeworks"/>
 		</Unit>
-		<Unit filename="/home/david/CLionProjects/PA1/homeworks/05_hard/closestPairOfPoints.cpp">
-			<Option target="homeworks"/>
-		</Unit>
 		<Unit filename="/home/david/CLionProjects/PA1/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>

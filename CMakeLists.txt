@@ -22,7 +22,7 @@ set(CMAKE_CXX_STANDARD 14)
 #        homeworks/05_easy/05_easy_v2.c)
 
 add_executable(homeworks
-        homeworks/05_hard/05_hard_v1.c homeworks/05_hard/closestPairOfPoints.cpp)
+        homeworks/05_hard/05_hard_v1.c)
 
 #add_executable(homeworks
 #        homeworks/06_easy/06_easy_v1.c)

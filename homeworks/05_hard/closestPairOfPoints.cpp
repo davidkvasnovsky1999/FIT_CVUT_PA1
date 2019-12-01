@@ -53,7 +53,7 @@ long double					bruteForce						( Point 			* points,
   
 // A utility function to find the distance between the closest points of 
 // strip of a given size. All points in strip[] are sorted according to 
-// y coordinate. They all have an upper bound on minimum distance as d. 
+// coordinateY coordinate. They all have an upper bound on minimum distance as d.
 // Note that this method seems to be a O(n^2) method, but it's a O(n) 
 // method as the inner loop runs at most 6 times 
 long double 				stripClosest					( Point 			* strip,
@@ -62,7 +62,7 @@ long double 				stripClosest					( Point 			* strip,
 {
 	long double min = d;  // Initialize the minimum distance as d
     // Pick all points one by one and try the next points till the difference 
-    // between y coordinates is smaller than d. 
+    // between coordinateY coordinates is smaller than d.
     // This is a proven fact that this loop runs at most 6 times 
     for ( int i = 0; i < size; ++ i )
         for ( int j = i + 1; j < size && ( strip [ j ].y - strip [ i ].y ) < min; ++ j )
@@ -72,8 +72,8 @@ long double 				stripClosest					( Point 			* strip,
 } 
   
 // A recursive function to find the smallest distance. The array Px contains 
-// all points sorted according to x coordinates and Py contains all points 
-// sorted according to y coordinates 
+// all points sorted according to coordinateX coordinates and Py contains all points
+// sorted according to coordinateY coordinates
 long double 				closestUtil						( Point 			* px,
 															  Point 			* py,
 															  int 				  n )
@@ -86,10 +86,10 @@ long double 				closestUtil						( Point 			* px,
     int mid = n / 2;
     Point midPoint = px [ mid ];
     
-    // Divide points in y sorted array around the vertical line. 
-    // Assumption: All x coordinates are distinct. 
-    Point Pyl [ mid + 1 ];   // y sorted points on left of vertical line
-    Point Pyr [ n - mid - 1 ];  // y sorted points on right of vertical line
+    // Divide points in coordinateY sorted array around the vertical line.
+    // Assumption: All coordinateX coordinates are distinct.
+    Point Pyl [ mid + 1 ];   // coordinateY sorted points on left of vertical line
+    Point Pyr [ n - mid - 1 ];  // coordinateY sorted points on right of vertical line
     int li = 0, ri = 0;  // indexes of left and right subarrays 
     for ( int i = 0; i < n; i ++ )
     { 

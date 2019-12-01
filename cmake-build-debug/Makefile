@@ -150,33 +150,6 @@ homeworks/05_hard/05_hard_v1.c.s:
 	$(MAKE) -f CMakeFiles/homeworks.dir/build.make CMakeFiles/homeworks.dir/homeworks/05_hard/05_hard_v1.c.s
 .PHONY : homeworks/05_hard/05_hard_v1.c.s
 
-homeworks/05_hard/closestPairOfPoints.o: homeworks/05_hard/closestPairOfPoints.cpp.o
-
-.PHONY : homeworks/05_hard/closestPairOfPoints.o
-
-# target to build an object file
-homeworks/05_hard/closestPairOfPoints.cpp.o:
-	$(MAKE) -f CMakeFiles/homeworks.dir/build.make CMakeFiles/homeworks.dir/homeworks/05_hard/closestPairOfPoints.cpp.o
-.PHONY : homeworks/05_hard/closestPairOfPoints.cpp.o
-
-homeworks/05_hard/closestPairOfPoints.i: homeworks/05_hard/closestPairOfPoints.cpp.i
-
-.PHONY : homeworks/05_hard/closestPairOfPoints.i
-
-# target to preprocess a source file
-homeworks/05_hard/closestPairOfPoints.cpp.i:
-	$(MAKE) -f CMakeFiles/homeworks.dir/build.make CMakeFiles/homeworks.dir/homeworks/05_hard/closestPairOfPoints.cpp.i
-.PHONY : homeworks/05_hard/closestPairOfPoints.cpp.i
-
-homeworks/05_hard/closestPairOfPoints.s: homeworks/05_hard/closestPairOfPoints.cpp.s
-
-.PHONY : homeworks/05_hard/closestPairOfPoints.s
-
-# target to generate assembly for a file
-homeworks/05_hard/closestPairOfPoints.cpp.s:
-	$(MAKE) -f CMakeFiles/homeworks.dir/build.make CMakeFiles/homeworks.dir/homeworks/05_hard/closestPairOfPoints.cpp.s
-.PHONY : homeworks/05_hard/closestPairOfPoints.cpp.s
-
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -189,9 +162,6 @@ help:
 	@echo "... homeworks/05_hard/05_hard_v1.o"
 	@echo "... homeworks/05_hard/05_hard_v1.i"
 	@echo "... homeworks/05_hard/05_hard_v1.s"
-	@echo "... homeworks/05_hard/closestPairOfPoints.o"
-	@echo "... homeworks/05_hard/closestPairOfPoints.i"
-	@echo "... homeworks/05_hard/closestPairOfPoints.s"
 .PHONY : help
 
 
