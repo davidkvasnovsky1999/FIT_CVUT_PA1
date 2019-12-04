@@ -10,7 +10,7 @@ int readInput 							( char 		*   		operation,
 										  long long * 			low,
 										  long long * 			high )
 {
-	int ret = scanf ( "%c %hi %lli %lli", operation, base, low , high );
+	int ret = scanf ( "%c %hi %lli %lli", operation, base, low, high );
 	if ( 4 == ret )
 	{
 		while ( 1 ) //check for possible not numeric input that that follows

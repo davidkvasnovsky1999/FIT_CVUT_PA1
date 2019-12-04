@@ -1,0 +1,3 @@
+[0,0] Speedy Jack
+[-1,-1] Turtle Ann
+[1,1] Pink Tiger

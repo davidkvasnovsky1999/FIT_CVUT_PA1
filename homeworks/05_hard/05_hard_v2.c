@@ -6,8 +6,12 @@
 
 typedef struct
 {
-    long double             coordinateX,
-                            coordinateY;
+    long double x, y;
+} Point;
+
+typedef struct
+{
+    Point                   coordinates;
     unsigned long long      indexOfNameBeginning; //to get flights name add this number (index) to a pointer stored in ( unsigned char * ) flightsContainer.names
     //If name of a flight is empty string then pointer called name in struct Flight points to '\n' in names of struct FlightsContainer.
     //This '\n' is only used for this one flight (it is possible that to have multiple succeeding '\n' chars in flightsContainer->names. Every '\n' is used for one flight.
@@ -247,8 +251,8 @@ int                     getFlights                          ( FlightsContainer  
             ( *ppFlightsContainer )->flights = ( Flight * ) realloc ( ( *ppFlightsContainer )->flights, ( *ppFlightsContainer )->numberOfAllocatedFlights * sizeof ( Flight ) );
         }
         currentFlight = ( *ppFlightsContainer )->flights + ( ( *ppFlightsContainer )->numberOfFlights ++ );
-        currentFlight->coordinateX = x;
-        currentFlight->coordinateY = y;
+        currentFlight->coordinates.x = x;
+        currentFlight->coordinates.y = y;
         if ( readFlightsName ( *ppFlightsContainer, currentFlight ) != 1 )
             return 0;
     }
@@ -279,71 +283,153 @@ int                     compareFlightsByXYCoordinates       ( const void        
 {
     if ( a == NULL || b == NULL )
         return 0;
-    if ( ( *( Flight * ) a ).coordinateX == ( *( Flight * ) b ).coordinateX )
-        return ( ( *( Flight * ) a ).coordinateY > ( *( Flight * ) b ).coordinateY ) ? 1 : -1;
-    return ( ( *( Flight * ) a ).coordinateX > ( *( Flight * ) b ).coordinateX ) ? 1 : -1;
+    if ( ( *( Flight * ) a ).coordinates.x == ( *( Flight * ) b ).coordinates.x )
+        return ( ( *( Flight * ) a ).coordinates.y > ( *( Flight * ) b ).coordinates.y ) ? 1 : -1;
+    return ( ( *( Flight * ) a ).coordinates.x > ( *( Flight * ) b ).coordinates.x ) ? 1 : -1;
 }
 
 long double             getDistanceBetweenTwoFlights        ( Flight                      flightA,
                                                               Flight                      flightB )
 {
-    return sqrtl ( powl ( ( flightA.coordinateX - flightB.coordinateX ), 2 ) + powl ( ( flightA.coordinateY - flightB.coordinateY ), 2 ) );
+    return sqrtl ( powl ( ( flightA.coordinates.x - flightB.coordinates.x ), 2 ) + powl ( ( flightA.coordinates.y - flightB.coordinates.y ), 2 ) );
 }
 
-long double             getMax                              ( long double                  numA,
+long double             getMin                              ( long double                  numA,
                                                               long double                  numB )
 {
-    if ( numA >= numB )
+    if ( numA < numB )
         return numA;
     return numB;
 }
 
-int                     calculateSmallestDistances          ( FlightsContainer ** ppFlightsContainer )
+/* Following two functions are needed for library function qsort().
+   Refer: http://www.cplusplus.com/reference/clibrary/cstdlib/qsort/ */
+
+// Needed to sort array of points according to X coordinate
+int 						compareX 						( const void		* a,
+                                                             const void		* b )
 {
-    if ( checkAndFixFContainersIntegrity ( ppFlightsContainer ) < 0 || ( *ppFlightsContainer )->numberOfFlights < 2 )
-        return 0;
-    qsort ( ( *ppFlightsContainer )->flights, ( *ppFlightsContainer )->numberOfFlights, sizeof ( Flight ), compareFlightsByXYCoordinates );
-    long double tempSmallestDistance = 0;
-    for ( unsigned long long i = 0; i < ( *ppFlightsContainer )->numberOfFlights - 1; i ++ )
-        for ( unsigned long long j = i + 1; j < ( *ppFlightsContainer )->numberOfFlights; j ++ )
-        {
-            Flight iterFlightA = *( ( *ppFlightsContainer )->flights + i );
-            Flight iterFlightB = *( ( *ppFlightsContainer )->flights + j );
-            tempSmallestDistance = getDistanceBetweenTwoFlights ( iterFlightA, iterFlightB );
-            long double areAlmostEqual = fabsl ( ( *ppFlightsContainer )->smallestDistance - tempSmallestDistance ) <= tempSmallestDistance / 1024;
-            
-//            areAlmostEqual = fabsl ( ( *ppFlightsContainer )->smallestDistance - tempSmallestDistance ) < tempSmallestDistance / powl ( 10, 8 );
-//            printf ( "tempSmallestDistance = %.*Lf\n", DECIMAL_DIG, tempSmallestDistance );
-//            printf ( "areAlmostEqual = %.*Lf\n", DECIMAL_DIG, areAlmostEqual );
-            if ( !areAlmostEqual && ( *ppFlightsContainer )->smallestDistance > tempSmallestDistance )
-            {
-                free ( ( *ppFlightsContainer )->indexesOfClosestPairs );
-                ( **ppFlightsContainer ).numberOfIndexesOfClosestPairs = 0;
-                ( **ppFlightsContainer ).numberOfAllocatedIndexesOfClosestPairs = 2;
-                if ( !( ( **ppFlightsContainer ).indexesOfClosestPairs =
-                                ( unsigned long long * ) malloc ( ( **ppFlightsContainer ).numberOfAllocatedIndexesOfClosestPairs * sizeof ( unsigned long long ) ) ) )
-                    return 0;
-            }
-            if ( areAlmostEqual || ( *ppFlightsContainer )->smallestDistance > tempSmallestDistance )
-            {
-                ( **ppFlightsContainer ).numberOfIndexesOfClosestPairs += 2;
-                if ( ( **ppFlightsContainer ).numberOfIndexesOfClosestPairs > ( **ppFlightsContainer ).numberOfAllocatedIndexesOfClosestPairs )
-                {
-                    ( **ppFlightsContainer ).numberOfAllocatedIndexesOfClosestPairs = ( **ppFlightsContainer ).numberOfIndexesOfClosestPairs * 2;
-                    if ( !( ( **ppFlightsContainer ).indexesOfClosestPairs =
-                                    ( unsigned long long * ) realloc (
-                                            ( **ppFlightsContainer ).indexesOfClosestPairs,
-                                            ( **ppFlightsContainer ).numberOfAllocatedIndexesOfClosestPairs * sizeof ( unsigned long long )
-                                    ) ) )
-                        return 0;
-                }
-                ( *ppFlightsContainer )->smallestDistance = tempSmallestDistance;
-                *( ( **ppFlightsContainer ).indexesOfClosestPairs + ( **ppFlightsContainer ).numberOfIndexesOfClosestPairs - 2 ) = i;
-                *( ( **ppFlightsContainer ).indexesOfClosestPairs + ( **ppFlightsContainer ).numberOfIndexesOfClosestPairs - 1 ) = j;
-            }
-        }
-    return 1;
+    Point *p1 = ( Point * ) a,  *p2 = ( Point * ) b;
+    return ( int ) ( p1->x - p2->x );
 }
+// Needed to sort array of points according to Y coordinate
+int 						compareY						( const void		* a,
+                                                             const void		* b )
+{
+    Point *p1 = ( Point * ) a, *p2 = ( Point * ) b;
+    return ( int ) ( p1->y - p2->y );
+}
+
+// A utility function to find the distance between two points
+long double					dist							( Point 			  p1,
+                                                                 Point 			  p2 )
+{
+    return sqrtl( ( p1.x - p2.x ) * ( p1.x - p2.x ) + ( p1.y - p2.y ) * ( p1.y - p2.y ) );
+}
+
+// A Brute Force method to return the smallest distance between two points
+// in P[] of size n
+long double					bruteForce						( Point 			* points,
+                                                                   unsigned long long 				  n )
+{
+    long double min = LDBL_MAX;
+    for ( unsigned long long i = 0; i < n; ++ i )
+        for ( unsigned long long j = i + 1; j < n; ++ j )
+            if ( dist ( points [ i ], points [ j ] ) < min )
+                min = dist ( points [ i ], points [ j ] );
+    return min;
+}
+
+
+
+// A utility function to find the distance between the closest points of
+// strip of a given size. All points in strip[] are sorted according to
+// coordinateY coordinate. They all have an upper bound on minimum distance as d.
+// Note that this method seems to be a O(n^2) method, but it's a O(n)
+// method as the inner loop runs at most 6 times
+long double 				stripClosest					( Point 			* strip,
+                                                             int 				  size,
+                                                             long double 		  d )
+{
+    long double min = d;  // Initialize the minimum distance as d
+    // Pick all points one by one and try the next points till the difference
+    // between coordinateY coordinates is smaller than d.
+    // This is a proven fact that this loop runs at most 6 times
+    for ( int i = 0; i < size; ++ i )
+        for ( int j = i + 1; j < size && ( strip [ j ].y - strip [ i ].y ) < min; ++ j )
+            if ( dist ( strip [ i ], strip [ j ] ) < min )
+                min = dist ( strip [ i ], strip [ j ] );
+    return min;
+}
+
+// A recursive function to find the smallest distance. The array Px contains
+// all points sorted according to coordinateX coordinates and Py contains all points
+// sorted according to coordinateY coordinates
+long double 				closestUtil						( Point 			* px,
+                                                               Point 			* py,
+                                                                unsigned long long 				  n )
+{
+    // If there are 2 or 3 points, then use brute force
+    if ( n <= 3 )
+        return bruteForce ( px, n );
+    
+    // Find the middle point
+    unsigned long long mid = n / 2;
+    Point midPoint = px [ mid ];
+    
+    // Divide points in coordinateY sorted array around the vertical line.
+    // Assumption: All coordinateX coordinates are distinct.
+    Point Pyl [ mid + 1 ];   // coordinateY sorted points on left of vertical line
+    Point Pyr [ n - mid - 1 ];  // coordinateY sorted points on right of vertical line
+    int li = 0, ri = 0;  // indexes of left and right subarrays
+    for ( unsigned long long i = 0; i < n; i ++ )
+    {
+        if ( py [ i ].x <= midPoint.x)
+            Pyl [ li ++ ] = py [ i ];
+        else
+            Pyr [ ri ++ ] = py [ i ];
+    }
+    // Consider the vertical line passing through the middle point
+    // calculate the smallest distance dl on left of middle point and
+    // dr on right side
+    long double dl = closestUtil ( px, Pyl, mid );
+    long double dr = closestUtil ( px + mid, Pyr, n-mid );
+    
+    // Find the smaller of two distances
+    long double d = ( dl < dr ) ? dl : dr;
+    
+    // Build an array strip[] that contains points close (closer than d)
+    // to the line passing through the middle point
+    Point strip [ n ];
+    int j = 0;
+    for ( unsigned long long i = 0; i < n; i ++ )
+        if ( fabsl ( py [ i ].x - midPoint.x) < d )
+            strip [ j ] = py [ i ], j ++;
+    
+    // Find the closest points in strip.  Return the minimum of d and closest
+    // distance is strip[]
+    return getMin ( d, stripClosest ( strip, j, d ) );
+}
+
+// The main function that finds the smallest distance
+// This method mainly uses closestUtil()
+long double 				closest							( FlightsContainer          * pFlightsContainer )
+{
+    Point * pX = ( Point * ) malloc ( sizeof ( Point ) * pFlightsContainer->numberOfFlights );
+    Point * pY = ( Point * ) malloc ( sizeof ( Point ) * pFlightsContainer->numberOfFlights );
+    for ( unsigned long long i = 0; i < pFlightsContainer->numberOfFlights; i ++ )
+    {
+        pX [ i ] = ( pFlightsContainer->flights + i )->coordinates;
+        pY [ i ] = ( pFlightsContainer->flights + i )->coordinates;
+    }
+    
+    qsort ( pX, pFlightsContainer->numberOfFlights, sizeof ( Point ), compareX );
+    qsort ( pY, pFlightsContainer->numberOfFlights, sizeof ( Point ), compareY );
+    
+    // Use recursive function closestUtil() to find the smallest distance
+    return closestUtil ( pX, pY, pFlightsContainer->numberOfFlights );
+}
+
 
 int                     printPairsOfFlightsWithSmallestDist ( FlightsContainer          * pFlightsContainer )
 {
@@ -386,17 +472,17 @@ int                     printPairsOfFlightsWithSmallestDist ( FlightsContainer  
 //    }
 //}
 
-void                    printFlightsCoordinates             ( FlightsContainer          * pFlightsContainer )
-{
-    if ( pFlightsContainer != NULL )
-    {
-        for ( unsigned long long i = 0; i < pFlightsContainer->numberOfFlights; i ++ )
-        {
-            printf ( "Coordinates x,y: [%.24Lf] [%.24Lf] %s\n", ( pFlightsContainer->flights + i )->coordinateX, ( pFlightsContainer->flights + i )->coordinateY,
-                     pFlightsContainer->names + ( ( *pFlightsContainer ).flights + i )->indexOfNameBeginning );
-        }
-    }
-}
+//void                    printFlightsCoordinates             ( FlightsContainer          * pFlightsContainer )
+//{
+//    if ( pFlightsContainer != NULL )
+//    {
+//        for ( unsigned long long i = 0; i < pFlightsContainer->numberOfFlights; i ++ )
+//        {
+//            printf ( "Coordinates x,y: [%.24Lf] [%.24Lf] %s\n", ( pFlightsContainer->flights + i )->coordinateX, ( pFlightsContainer->flights + i )->coordinateY,
+//                     pFlightsContainer->names + ( ( *pFlightsContainer ).flights + i )->indexOfNameBeginning );
+//        }
+//    }
+//}
 
 //void                    printFlightsCoordinates             ( FlightsContainer          * pFlightsContainer )
 //{
@@ -420,7 +506,7 @@ int                     main                                ( void )
     printf ( "Zadejte lety:\n" );
     if ( getFlights ( &pFlightsContainer ) )
     {
-        calculateSmallestDistances ( &pFlightsContainer );
+        closest ( pFlightsContainer );
 //        printFlightsCoordinates ( pFlightsContainer );
         printPairsOfFlightsWithSmallestDist ( pFlightsContainer );
     }

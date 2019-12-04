@@ -218,7 +218,7 @@ int                clipLine                                ( double            r
 int                almostEqual                             ( double            x,
                                                              double            y )
 {
-    return fabs( x - y ) < DBL_EPSILON * x * y;
+    return fabs ( x - y ) < DBL_EPSILON * x * y;
 }
 
 int                main                                    ( void )
