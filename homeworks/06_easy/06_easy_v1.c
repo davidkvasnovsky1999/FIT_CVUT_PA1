@@ -77,7 +77,7 @@ int                 findAndReturnChildNodeByCharacter       ( TrieNode          
                                                               boolean                     caseSensitive )
 {
     if ( parentNode == NULL || parentNode->numberOfChildren == 0 )
-        return NULL;
+        return 0;
     unsigned char maxNumberOfFoundChildren = 2 - caseSensitive;
     if ( *foundChildren == NULL && ( *foundChildren = ( TrieNode ** ) malloc ( maxNumberOfFoundChildren * sizeof ( TrieNode * ) ) ) == NULL )
         return -1;
@@ -88,28 +88,33 @@ int                 findAndReturnChildNodeByCharacter       ( TrieNode          
           index <= indexOfLastChild;
           index ++ )
     {
-        if ( && ( caseSensitive || ( STARTING_ASCII_CHAR <= characterToFindTheChildBy && characterToFindTheChildBy <= ENDING_ASCII_CHAR ) || ( *( *( foundChildren ) + 1 ) = ( *( parentNode->rootsAncestors ) + index )->character == characterToFindTheChildBy ?  ) )
-        if ( ( *( parentNode->rootsAncestors ) + index )->character == characterToFindTheChildBy )
-        {
-        
-        }
+//        if ( && ( caseSensitive || ( STARTING_ASCII_CHAR <= characterToFindTheChildBy && characterToFindTheChildBy <= ENDING_ASCII_CHAR ) || ( *( *( foundChildren ) + 1 ) = ( *( parentNode->rootsAncestors ) + index )->character == characterToFindTheChildBy ?  ) )
+//        if ( ( *( parentNode->rootsAncestors ) + index )->character == characterToFindTheChildBy )
+//        {
+//
+//        }
         if ( !caseSensitive )
         {
             if      ( *( *( foundChildren ) + 0 ) == NULL )
+            {
                 if ( 'a' <= characterToFindTheChildBy && characterToFindTheChildBy <= 'z'
                      && characterToFindTheChildBy - 32 ==  ( *( parentNode->rootsAncestors ) + index )->character )
+                {}
+            }
             else if ( *( *( foundChildren ) + 1 ) == NULL )
+            {
                 if ( 'A' <= characterToFindTheChildBy && characterToFindTheChildBy <= 'Z'
                      && characterToFindTheChildBy + 32 ==  ( *( parentNode->rootsAncestors ) + index )->character )
+                {}
+            }
             else
                 break;
         }
         else if ( *( *( foundChildren ) + 0 ) == NULL &&  characterToFindTheChildBy ==  ( *( parentNode->rootsAncestors ) + index )->character )
             *( *( foundChildren ) + 0 ) = ( *( parentNode->rootsAncestors ) + index );
         
-         
     }
-    return foundTrieNode;
+    return 1;
 }
 
 int                 insertKey                               ( TrieRoot                  * pTrieRoot,
