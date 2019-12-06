@@ -4,10 +4,10 @@
 #include <string.h>
 
 //#define boolean char;
-#define true 1;
-#define false 0;
-#define STARTING_ASCII_CHAR 32;
-#define ENDING_ASCII_CHAR 126;
+#define true 1
+#define false 0
+#define STARTING_ASCII_CHAR 32
+#define ENDING_ASCII_CHAR 126
 
 typedef unsigned char boolean;
 

@@ -3,10 +3,10 @@
 #include <math.h>
 #include <string.h>
 
-#define true 1;
-#define false 0;
-#define STARTING_ASCII_CHAR 32;
-#define ENDING_ASCII_CHAR 126;
+#define true 1
+#define false 0
+#define STARTING_ASCII_CHAR 32
+#define ENDING_ASCII_CHAR 126
 
 typedef unsigned char boolean;
 
@@ -39,25 +39,34 @@ int                 getNumberOfAllowedCharsForPhrase        ( )
     return n - m;
 }
 
-int                 initNewNode                             ( TrieNode                  * newNode )
+//int                 initNewNode                             ( TrieNode                  * newNode )
+//{
+//    if ( newNode == NULL )
+//        return 0;
+//    newNode->wordFrequency              = 0;
+//    newNode->character                  = 0;
+//    newNode->numberOfChildren           = 0;
+//    newNode->indexOfNodesFirstChildInRA = 0;
+//    newNode->isWordsEnd                 = false;
+//    return 1;
+//}
+
+TrieNode *          initNode                                ( TrieNode                  * node,
+                                                              long double                 wordFrequency,
+                                                              unsigned char               characterItHolds,
+                                                              boolean                     isWordsEnd )
 {
-    if ( newNode == NULL )
-        return 0;
-    newNode->wordFrequency              = 0;
-    newNode->character                  = 0;
-    newNode->numberOfChildren           = 0;
-    newNode->indexOfNodesFirstChildInRA = 0;
-    newNode->isWordsEnd                 = false;
-    return 1;
+    if ( node != NULL )
+    {
+        node->wordFrequency              = wordFrequency;
+        node->character                  = characterItHolds;
+        node->numberOfChildren           = 0;
+        node->indexOfNodesFirstChildInRA = 0;
+        node->isWordsEnd                 = isWordsEnd;
+    }
+    return node;
 }
 
-TrieNode *          createAndInitNewNode                    (  )
-{
-    TrieNode * newTrieNodePointer;
-    if ( ( newTrieNodePointer = ( TrieNode * ) malloc ( sizeof ( TrieNode ) ) ) != NULL )
-        initNewNode ( newTrieNodePointer );
-    return newTrieNodePointer;
-}
 
 TrieRoot *          getEmptyTrieRoot                        ( )
 {
@@ -99,13 +108,13 @@ int                 findAndReturnChildNodeByCharacter       ( TrieNode          
             {
                 if ( 'a' <= characterToFindTheChildBy && characterToFindTheChildBy <= 'z'
                      && characterToFindTheChildBy - 32 ==  ( *( parentNode->rootsAncestors ) + index )->character )
-                {}
+                    *( *( foundChildren ) + 0 ) = ( *( parentNode->rootsAncestors ) + index );
             }
             else if ( *( *( foundChildren ) + 1 ) == NULL )
             {
                 if ( 'A' <= characterToFindTheChildBy && characterToFindTheChildBy <= 'Z'
                      && characterToFindTheChildBy + 32 ==  ( *( parentNode->rootsAncestors ) + index )->character )
-                {}
+                    *( *( foundChildren ) + 1 ) = ( *( parentNode->rootsAncestors ) + index );
             }
             else
                 break;
@@ -125,15 +134,17 @@ int                 insertKey                               ( TrieRoot          
         return 0;
     TrieNode tRootConvertedToTNode;
     tRootConvertedToTNode.numberOfChildren           = pTrieRoot->numberOfChildren;
-    tRootConvertedToTNode.indexOfNodesFirstChildInRA = 0;
-    TrieNode * pCrawlNode                            = &tRootConvertedToTNode;
+    tRootConvertedToTNode.indexOfNodesFirstChildInRA = &tRootConvertedToTNode;
+    TrieNode ** pCharsNode                           = 0;
+    TrieNode * pCrawlNode                            = NULL;
     for ( unsigned long long level = 0; level < strlen ( key ); level ++ )
     {
-        TrieNode * pCharsNode = findAndReturnChildNodeByCharacter ( pCrawlNode, key [ level ] );
-        if ( pCharsNode == NULL && !( pCharsNode = getNewTrieNode () ) )
+        findAndReturnChildNodeByCharacter ( pCrawlNode, &pCharsNode, key [ level ], true );
+        if ( pCharsNode == NULL || ( *pCharsNode == NULL  && !( *pCharsNode = getNewTrieNode () ) )
             return -1;
         pCrawlNode = pCharsNode;
     }
+    free ( pCharsNode );
     pCrawlNode->isWordsEnd = true;
     pCrawlNode->wordFrequency = wordFrequency;
     return 1;
