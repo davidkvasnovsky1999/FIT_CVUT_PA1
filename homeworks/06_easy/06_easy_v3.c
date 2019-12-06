@@ -75,7 +75,7 @@ int                 getLineOfAllowedChars                   ( unsigned char     
             free ( *linePointer );
             *numberOfAllocatedChars = 0;
             *linePointer = NULL;
-            return readChar == EOF && lineLength == 0 ? EOF : 0;
+            return ( readChar == EOF && lineLength == 0 ) ? EOF : 0;
         }
         if ( lineLength + 1 > *numberOfAllocatedChars )
         {
@@ -91,7 +91,7 @@ int                 getLineOfAllowedChars                   ( unsigned char     
     *linePointer = ( unsigned char * ) realloc ( *linePointer, *numberOfAllocatedChars );
     if ( *linePointer == NULL )
         exit ( 1 );
-    return ( int ) numberOfAllocatedChars;
+    return 1;
 }
 
 int                 readWordFrequency                       ( long double               * wordFrequency )
@@ -103,6 +103,8 @@ int                 readWordFrequency                       ( long double       
     {
         ret = sscanf ( ( const char * ) readWordFreq, "%Lf", wordFrequency );
         free ( readWordFreq );
+        if ( ret == EOF )
+            ret = 0;
     }
     return ret;
 }
@@ -115,13 +117,13 @@ int                 loadPhrases                             ( PhrasesContainer  
         exit ( 1 );
     int             ret0                                = 1,
                     ret1                                = 1;
-    size_t          numberOfAllocatedCharsForWordFreq   = 0,
-                    numberOfAllocatedCharsForWord       = 0;
+    size_t          numberOfAllocatedCharsForWord       = 0;
     long double     tempWordFrequency                   = 0;
     unsigned char * readWord                            = NULL;
     Phrase        * newPhrase                           = NULL;
-    while ( ( ret0 = readWordFrequency ( &tempWordFrequency ) ) )
+    while ( ( ret0 = readWordFrequency ( &tempWordFrequency ) ) > 0 )
     {
+        readWord = NULL;
         ret1 = getLineOfAllowedChars ( &readWord, &numberOfAllocatedCharsForWord, '\n', stdin );
         if ( ret1 == 1 && numberOfAllocatedCharsForWord > 1 )
         {
@@ -138,9 +140,10 @@ int                 loadPhrases                             ( PhrasesContainer  
             newPhrase->wordFrequency = tempWordFrequency;
             *( (*phrasesContainer)->phrases + (*phrasesContainer)->numberOfPhrases ++ ) = newPhrase;
         }
-        else break;
+        else
+            return 0;
     }
-    if ( ret0 != EOF && ret0 != 1 )
+    if ( ret0 != EOF )
         return 0;
     return 1;
 }
