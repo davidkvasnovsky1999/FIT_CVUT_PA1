@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <errno.h>
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
@@ -20,8 +21,8 @@ typedef struct Phrase
 typedef struct PhrasesContainer
 {
     unsigned long long      numberOfPhrases,
-                            numberOfAllocatedPhrases;
-    Phrase                * phrases;
+                            numberOfAllocatedPhrasePointers;
+    Phrase               ** phrases;
 } PhrasesContainer;
 
 int                 getNumberOfAllowedCharsForPhrase        ( )
@@ -37,8 +38,8 @@ PhrasesContainer *  getNewInitPhraseContainer               ( )
     if ( phrasesContainer != NULL )
     {
         phrasesContainer->numberOfPhrases = 0;
-        phrasesContainer->numberOfAllocatedPhrases = 8;
-        phrasesContainer->phrases = ( Phrase * ) malloc ( phrasesContainer->numberOfAllocatedPhrases * sizeof ( Phrase ) );
+        phrasesContainer->numberOfAllocatedPhrasePointers = 8;
+        phrasesContainer->phrases = ( Phrase ** ) malloc ( phrasesContainer->numberOfAllocatedPhrasePointers * sizeof ( Phrase * ) );
         if ( phrasesContainer->phrases == NULL )
         {
             free ( phrasesContainer );
@@ -64,11 +65,12 @@ int                 getLineOfAllowedChars                   ( unsigned char     
     }
     int readChar = 0;
     size_t lineLength = 0;
-    while ( ( readChar = fgetc ( stream ) ) != 0 )
+    do
     {
+        readChar = fgetc ( stream );
         if ( readChar == delimiter )
             readChar = 0;
-        else if ( !( STARTING_ASCII_CHAR <= readChar && readChar >= ENDING_ASCII_CHAR ) )
+        else if ( !( STARTING_ASCII_CHAR <= readChar && readChar <= ENDING_ASCII_CHAR ) )
         {
             free ( *linePointer );
             *numberOfAllocatedChars = 0;
@@ -84,39 +86,126 @@ int                 getLineOfAllowedChars                   ( unsigned char     
         }
         *( ( *linePointer ) + lineLength ++ ) = ( unsigned char ) readChar;
     }
+    while ( readChar != 0 );
     *numberOfAllocatedChars = lineLength;
     *linePointer = ( unsigned char * ) realloc ( *linePointer, *numberOfAllocatedChars );
     if ( *linePointer == NULL )
         exit ( 1 );
-    return 1;
+    return ( int ) numberOfAllocatedChars;
+}
+
+int                 readWordFrequency                       ( long double               * wordFrequency )
+{
+    unsigned char * readWordFreq = NULL;
+    size_t          size         = 0;
+    int             ret          = 1;
+    if ( ( ret = getLineOfAllowedChars ( &readWordFreq, &size, ':', stdin ) ) )
+    {
+        ret = sscanf ( ( const char * ) readWordFreq, "%Lf", wordFrequency );
+        free ( readWordFreq );
+    }
+    return ret;
 }
 
 int                 loadPhrases                             ( PhrasesContainer         ** phrasesContainer )
 {
-    if ( *phrasesContainer == NULL && ( *phrasesContainer = getNewInitPhraseContainer ( ) ) == NULL )
+    if ( phrasesContainer == NULL )
         return 0;
-    int             ret                 = 0;
-    long double     tempWordFrequency   = 0;
-    unsigned char   charAfterWF         = 0,
-                  * readFreqNumber      = ( unsigned char * ) malloc ( 64 ),
-                  * readPhrase          = NULL;
-    size_t numberOfAllocatedChars = 0;
-    while ( 1 )
+    if ( *phrasesContainer == NULL && ( *phrasesContainer = getNewInitPhraseContainer ( ) ) == NULL )
+        exit ( 1 );
+    int             ret0                                = 1,
+                    ret1                                = 1;
+    size_t          numberOfAllocatedCharsForWordFreq   = 0,
+                    numberOfAllocatedCharsForWord       = 0;
+    long double     tempWordFrequency                   = 0;
+    unsigned char * readWord                            = NULL;
+    Phrase        * newPhrase                           = NULL;
+    while ( ( ret0 = readWordFrequency ( &tempWordFrequency ) ) )
     {
-        ret = getLineOfAllowedChars ( &readFreqNumber, &numberOfAllocatedChars, '\n', stdin );
-        if ( EOF == ret )
-            break;
+        ret1 = getLineOfAllowedChars ( &readWord, &numberOfAllocatedCharsForWord, '\n', stdin );
+        if ( ret1 == 1 && numberOfAllocatedCharsForWord > 1 )
+        {
+            if ( (*phrasesContainer)->numberOfPhrases + 1 >= (*phrasesContainer)->numberOfAllocatedPhrasePointers )
+            {
+                (*phrasesContainer)->numberOfAllocatedPhrasePointers = ( (*phrasesContainer)->numberOfPhrases + 1 ) * 2;
+                if ( ( (*phrasesContainer)->phrases = ( Phrase ** ) realloc ( (*phrasesContainer)->phrases,
+                        (*phrasesContainer)->numberOfAllocatedPhrasePointers * sizeof ( Phrase * ) ) ) == NULL )
+                    exit ( 0 );
+            }
+            if ( ( newPhrase = ( Phrase * ) malloc ( sizeof ( Phrase ) ) ) == NULL )
+                exit ( 1 );
+            newPhrase->word = readWord;
+            newPhrase->wordFrequency = tempWordFrequency;
+            *( (*phrasesContainer)->phrases + (*phrasesContainer)->numberOfPhrases ++ ) = newPhrase;
+        }
+        else break;
     }
+    if ( ret0 != EOF && ret0 != 1 )
+        return 0;
     return 1;
 }
 
+int                 comparePhrasesByWordFrequency           ( const void                * p,
+                                                              const void                * q )
+{
+    if ( p == NULL || q == NULL )
+        return 0;
+    long double pWordFreq       = ( ( Phrase * ) p )->wordFrequency,
+                qWordFreq       = ( ( Phrase * ) q )->wordFrequency,
+                areAlmostEqual  = fabsl ( pWordFreq - qWordFreq ) <= qWordFreq / 1024;
+    if ( !areAlmostEqual )
+        return pWordFreq > qWordFreq ? -1 : 1;
+    else
+        return 0;
+}
+
+int                 comparePhrasesByWord                    ( const void                * p,
+                                                              const void                * q )
+{
+    if ( p == NULL || q == NULL )
+        return 0;
+    unsigned char * pWord = ( ( Phrase * ) p )->word,
+                  * qWord = ( ( Phrase * ) q )->word;
+    return strcmp ( ( const char * ) pWord, ( const char * ) qWord );
+}
+
+void                printAllPhrases                         ( PhrasesContainer          * phrasesContainer )
+{
+    if ( phrasesContainer != NULL )
+    {
+        printf ( "Number of phrases: %llu\n", phrasesContainer->numberOfPhrases );
+        for ( unsigned long long i = 0; i < phrasesContainer->numberOfPhrases; i ++ )
+            printf ( "wordFreq = %Lf; word = %s\n", (*( phrasesContainer->phrases + i ))->wordFrequency, (*( phrasesContainer->phrases + i ))->word );
+    }
+}
+
+void                freePhrasesContainer                    ( PhrasesContainer         ** phrasesContainer )
+{
+    if ( phrasesContainer != NULL && *phrasesContainer != NULL )
+    {
+        Phrase * ppPhrase = NULL;
+        for ( unsigned long long i = 0; i < (*phrasesContainer)->numberOfPhrases; i ++ )
+        {
+            ppPhrase = *((*phrasesContainer)->phrases + i);
+            free ( ppPhrase->word );
+            free ( ppPhrase );
+        }
+        free ( (*phrasesContainer)->phrases );
+        free ( *phrasesContainer );
+        *phrasesContainer = NULL;
+    }
+}
 
 int                 main                                    ( void )
 {
     PhrasesContainer * pPhrasesContainer = NULL;
-    if ( !loadPhrases ( &pPhrasesContainer ) )
-        return 1;
-    
-    
+    if ( loadPhrases ( &pPhrasesContainer ) )
+    {
+//        qsort ( pPhrasesContainer->phrases, pPhrasesContainer->numberOfPhrases, sizeof ( Phrase * ), comparePhrasesByWord );
+//        printAllPhrases ( pPhrasesContainer );
+    }
+    else
+        printf ( "Nespravny vstup\n" );
+    freePhrasesContainer ( &pPhrasesContainer );
     return 0;
 }
