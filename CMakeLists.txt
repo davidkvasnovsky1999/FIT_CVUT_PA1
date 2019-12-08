@@ -26,5 +26,8 @@ set(CMAKE_CXX_STANDARD 14)
 #add_executable(homeworks
 #        homeworks/05_hard/05_hard_v2.c)
 
+#add_executable(homeworks
+#        homeworks/06_easy/06_easy_v3.c)
+
 add_executable(homeworks
-        homeworks/06_easy/06_easy_v3.c)
+        homeworks/06_hard/06_hard_v1.c)

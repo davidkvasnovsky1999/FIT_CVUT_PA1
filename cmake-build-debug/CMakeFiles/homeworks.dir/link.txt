@@ -1,1 +1,1 @@
-/usr/bin/cc -g   CMakeFiles/homeworks.dir/homeworks/06_easy/06_easy_v3.c.o  -o homeworks 
+/usr/bin/cc -g   CMakeFiles/homeworks.dir/homeworks/06_hard/06_hard_v1.c.o  -o homeworks 

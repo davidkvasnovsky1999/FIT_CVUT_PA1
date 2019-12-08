@@ -170,7 +170,8 @@ int                 comparePhrasesByWordFrequency           ( const void        
 
 int                 caseInsensitiveStringCmp                ( const char                * stringA,
                                                               const char                * stringB,
-                                                              unsigned long long          numberOfCharsToCompare )
+                                                              unsigned long long          numberOfCharsToCompare,
+                                                              size_t                    * indexOfFirstNotMatchingChar )
 {
     if ( stringA == NULL || stringB == NULL )
         return 0;
@@ -179,16 +180,38 @@ int                 caseInsensitiveStringCmp                ( const char        
                           * biggerLength = lengthOfStringA > lengthOfStringB ? &lengthOfStringA : &lengthOfStringB;
     if ( numberOfCharsToCompare > *biggerLength )
         numberOfCharsToCompare = *biggerLength;
-    for ( unsigned long long i = 0; i < numberOfCharsToCompare; i ++ )
+    for ( size_t i = 0; i < numberOfCharsToCompare; i ++ )
     {
         if ( stringA [ i ] != stringB [ i ]
              && !( 'a' <= stringA [ i ] && stringA [ i ] <= 'z' && stringA [ i ] - 32 == stringB [ i ] )
              && !( 'A' <= stringA [ i ] && stringA [ i ] <= 'Z' && stringA [ i ] + 32 == stringB [ i ] ) )
+        {
+            *indexOfFirstNotMatchingChar = i;
             return stringA [ i ] < stringB [ i ] ? -1 : 1;
+        }
         if ( stringA [ i ] == 0 || stringB [ i ] == 0 )
             break;
     }
+    *indexOfFirstNotMatchingChar = 0;
     return 0;
+}
+
+int                 isStrInsideOf                           ( const char                * string,
+                                                              const char                * stringToFind )
+{
+    if ( string == NULL || stringToFind == NULL || strlen ( string ) < strlen ( stringToFind ) )
+        return 0;
+    char * stringToCompare = ( char * ) string;
+    size_t indexOfNotMatchingChar = 0;
+    int ret = 1;
+    do
+    {
+        stringToCompare += indexOfNotMatchingChar;
+        while ( *stringToCompare != 0 && *stringToCompare != *stringToFind )
+            stringToCompare ++;
+    }
+    while ( *stringToCompare != 0 || 0 != ( ret = caseInsensitiveStringCmp ( stringToCompare, stringToFind, strlen ( stringToFind ), &indexOfNotMatchingChar ) ) );
+    return ret;
 }
 
 //int                 comparePhrasesByWord                    ( const void                * p,
@@ -235,7 +258,7 @@ unsigned long long  getAllPhrasesStartingWith               ( const char        
             for ( unsigned long long i = 0; i < pPhrasesContainer->numberOfPhrases; i ++ )
             {
                 Phrase * iterPhrase = *( pPhrasesContainer->phrases + i );
-                if ( caseInsensitiveStringCmp ( iterPhrase->word, string, strlen ( string ) ) == 0 )
+                if ( isStrInsideOf ( iterPhrase->word, string ) == 0 )
                 {
                     if ( numberOfMatchingPhrases + 1 >= numberOfAllocatedPhrasePointers )
                     {
