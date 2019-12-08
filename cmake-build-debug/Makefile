@@ -111,44 +111,44 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named homeworks
+# Target rules for targets named test
 
 # Build rule for target.
-homeworks: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 homeworks
-.PHONY : homeworks
+test: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 test
+.PHONY : test
 
 # fast build rule for target.
-homeworks/fast:
-	$(MAKE) -f CMakeFiles/homeworks.dir/build.make CMakeFiles/homeworks.dir/build
-.PHONY : homeworks/fast
+test/fast:
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/build
+.PHONY : test/fast
 
-homeworks/06_hard/06_hard_v1.o: homeworks/06_hard/06_hard_v1.c.o
+test/test.o: test/test.c.o
 
-.PHONY : homeworks/06_hard/06_hard_v1.o
+.PHONY : test/test.o
 
 # target to build an object file
-homeworks/06_hard/06_hard_v1.c.o:
-	$(MAKE) -f CMakeFiles/homeworks.dir/build.make CMakeFiles/homeworks.dir/homeworks/06_hard/06_hard_v1.c.o
-.PHONY : homeworks/06_hard/06_hard_v1.c.o
+test/test.c.o:
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/test/test.c.o
+.PHONY : test/test.c.o
 
-homeworks/06_hard/06_hard_v1.i: homeworks/06_hard/06_hard_v1.c.i
+test/test.i: test/test.c.i
 
-.PHONY : homeworks/06_hard/06_hard_v1.i
+.PHONY : test/test.i
 
 # target to preprocess a source file
-homeworks/06_hard/06_hard_v1.c.i:
-	$(MAKE) -f CMakeFiles/homeworks.dir/build.make CMakeFiles/homeworks.dir/homeworks/06_hard/06_hard_v1.c.i
-.PHONY : homeworks/06_hard/06_hard_v1.c.i
+test/test.c.i:
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/test/test.c.i
+.PHONY : test/test.c.i
 
-homeworks/06_hard/06_hard_v1.s: homeworks/06_hard/06_hard_v1.c.s
+test/test.s: test/test.c.s
 
-.PHONY : homeworks/06_hard/06_hard_v1.s
+.PHONY : test/test.s
 
 # target to generate assembly for a file
-homeworks/06_hard/06_hard_v1.c.s:
-	$(MAKE) -f CMakeFiles/homeworks.dir/build.make CMakeFiles/homeworks.dir/homeworks/06_hard/06_hard_v1.c.s
-.PHONY : homeworks/06_hard/06_hard_v1.c.s
+test/test.c.s:
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/test/test.c.s
+.PHONY : test/test.c.s
 
 # Help Target
 help:
@@ -157,11 +157,11 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... rebuild_cache"
-	@echo "... homeworks"
+	@echo "... test"
 	@echo "... edit_cache"
-	@echo "... homeworks/06_hard/06_hard_v1.o"
-	@echo "... homeworks/06_hard/06_hard_v1.i"
-	@echo "... homeworks/06_hard/06_hard_v1.s"
+	@echo "... test/test.o"
+	@echo "... test/test.i"
+	@echo "... test/test.s"
 .PHONY : help
 
 

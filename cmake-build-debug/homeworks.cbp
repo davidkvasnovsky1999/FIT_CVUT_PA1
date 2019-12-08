@@ -27,8 +27,8 @@
 					<DistClean command="/usr/bin/make -j12 -f &quot;/home/david/CLionProjects/PA1/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
-			<Target title="homeworks">
-				<Option output="/home/david/CLionProjects/PA1/cmake-build-debug/homeworks" prefix_auto="0" extension_auto="0"/>
+			<Target title="test">
+				<Option output="/home/david/CLionProjects/PA1/cmake-build-debug/test" prefix_auto="0" extension_auto="0"/>
 				<Option working_dir="/home/david/CLionProjects/PA1/cmake-build-debug"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
@@ -43,14 +43,14 @@
 					<Add directory="/usr/include"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j12 -f &quot;/home/david/CLionProjects/PA1/cmake-build-debug/Makefile&quot;  VERBOSE=1 homeworks"/>
+					<Build command="/usr/bin/make -j12 -f &quot;/home/david/CLionProjects/PA1/cmake-build-debug/Makefile&quot;  VERBOSE=1 test"/>
 					<CompileFile command="/usr/bin/make -j12 -f &quot;/home/david/CLionProjects/PA1/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
 					<Clean command="/usr/bin/make -j12 -f &quot;/home/david/CLionProjects/PA1/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 					<DistClean command="/usr/bin/make -j12 -f &quot;/home/david/CLionProjects/PA1/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
-			<Target title="homeworks/fast">
-				<Option output="/home/david/CLionProjects/PA1/cmake-build-debug/homeworks" prefix_auto="0" extension_auto="0"/>
+			<Target title="test/fast">
+				<Option output="/home/david/CLionProjects/PA1/cmake-build-debug/test" prefix_auto="0" extension_auto="0"/>
 				<Option working_dir="/home/david/CLionProjects/PA1/cmake-build-debug"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
@@ -65,7 +65,7 @@
 					<Add directory="/usr/include"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j12 -f &quot;/home/david/CLionProjects/PA1/cmake-build-debug/Makefile&quot;  VERBOSE=1 homeworks/fast"/>
+					<Build command="/usr/bin/make -j12 -f &quot;/home/david/CLionProjects/PA1/cmake-build-debug/Makefile&quot;  VERBOSE=1 test/fast"/>
 					<CompileFile command="/usr/bin/make -j12 -f &quot;/home/david/CLionProjects/PA1/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
 					<Clean command="/usr/bin/make -j12 -f &quot;/home/david/CLionProjects/PA1/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 					<DistClean command="/usr/bin/make -j12 -f &quot;/home/david/CLionProjects/PA1/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
@@ -82,8 +82,8 @@
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="/home/david/CLionProjects/PA1/homeworks/06_hard/06_hard_v1.c">
-			<Option target="homeworks"/>
+		<Unit filename="/home/david/CLionProjects/PA1/test/test.c">
+			<Option target="test"/>
 		</Unit>
 		<Unit filename="/home/david/CLionProjects/PA1/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>

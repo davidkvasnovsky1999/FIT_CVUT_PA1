@@ -5,7 +5,6 @@
 #include <string.h>
 #include <float.h>
 
-//#define boolean char;
 #define true 1
 #define false 0
 #define STARTING_ASCII_CHAR 32
@@ -168,6 +167,27 @@ int                 comparePhrasesByWordFrequency           ( const void        
         return 0;
 }
 
+int                 compareChars                            ( const char                  charA,
+                                                              const char                  charB,
+                                                              boolean                     caseInsensitive )
+{
+    if ( charA != charB )
+    {
+        if
+        (   caseInsensitive == 1
+            &&
+            (
+                ( 'a' <= charA && charA <= 'z' && charA - 32 == charB )
+                ||
+                ( 'A' <= charA && charA <= 'Z' && charA + 32 == charB )
+            )
+        )
+            return 0;
+        return charA < charB ? -1 : 1;
+    }
+    return 0;
+}
+
 int                 caseInsensitiveStringCmp                ( const char                * stringA,
                                                               const char                * stringB,
                                                               unsigned long long          numberOfCharsToCompare,
@@ -178,16 +198,15 @@ int                 caseInsensitiveStringCmp                ( const char        
     unsigned long long      lengthOfStringA = strlen ( stringA ),
                             lengthOfStringB = strlen ( stringB ),
                           * biggerLength = lengthOfStringA > lengthOfStringB ? &lengthOfStringA : &lengthOfStringB;
+    int ret = 0;
     if ( numberOfCharsToCompare > *biggerLength )
         numberOfCharsToCompare = *biggerLength;
     for ( size_t i = 0; i < numberOfCharsToCompare; i ++ )
     {
-        if ( stringA [ i ] != stringB [ i ]
-             && !( 'a' <= stringA [ i ] && stringA [ i ] <= 'z' && stringA [ i ] - 32 == stringB [ i ] )
-             && !( 'A' <= stringA [ i ] && stringA [ i ] <= 'Z' && stringA [ i ] + 32 == stringB [ i ] ) )
+        if ( ( ret = compareChars ( stringA [ i ], stringB [ i ], true ) ) != 0 )
         {
             *indexOfFirstNotMatchingChar = i;
-            return stringA [ i ] < stringB [ i ] ? -1 : 1;
+            return ret;
         }
         if ( stringA [ i ] == 0 || stringB [ i ] == 0 )
             break;
@@ -201,17 +220,17 @@ int                 isStrInsideOf                           ( const char        
 {
     if ( string == NULL || stringToFind == NULL || strlen ( string ) < strlen ( stringToFind ) )
         return 0;
-    char * stringToCompare = ( char * ) string;
-    size_t indexOfNotMatchingChar = 0;
-    int ret = 1;
+    char      * stringToCompare         = ( char * ) string;
+    size_t      indexOfNotMatchingChar  = 0;
+    int         ret                     = 1;
     do
     {
         stringToCompare += indexOfNotMatchingChar;
-        while ( *stringToCompare != 0 && *stringToCompare != *stringToFind )
+        while ( *stringToCompare != 0 && compareChars ( *stringToCompare, *stringToFind, true ) != 0 )
             stringToCompare ++;
     }
-    while ( *stringToCompare != 0 || 0 != ( ret = caseInsensitiveStringCmp ( stringToCompare, stringToFind, strlen ( stringToFind ), &indexOfNotMatchingChar ) ) );
-    return ret;
+    while ( *stringToCompare != 0 && 0 != ( ret = caseInsensitiveStringCmp ( stringToCompare, stringToFind, strlen ( stringToFind ), &indexOfNotMatchingChar ) ) );
+    return ret == 0 ? 1 : 0;
 }
 
 //int                 comparePhrasesByWord                    ( const void                * p,
@@ -258,7 +277,7 @@ unsigned long long  getAllPhrasesStartingWith               ( const char        
             for ( unsigned long long i = 0; i < pPhrasesContainer->numberOfPhrases; i ++ )
             {
                 Phrase * iterPhrase = *( pPhrasesContainer->phrases + i );
-                if ( isStrInsideOf ( iterPhrase->word, string ) == 0 )
+                if ( isStrInsideOf ( iterPhrase->word, string ) == 1 )
                 {
                     if ( numberOfMatchingPhrases + 1 >= numberOfAllocatedPhrasePointers )
                     {
