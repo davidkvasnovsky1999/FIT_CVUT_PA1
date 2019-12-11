@@ -111,44 +111,44 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named test
+# Target rules for targets named homeworks
 
 # Build rule for target.
-test: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 test
-.PHONY : test
+homeworks: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 homeworks
+.PHONY : homeworks
 
 # fast build rule for target.
-test/fast:
-	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/build
-.PHONY : test/fast
+homeworks/fast:
+	$(MAKE) -f CMakeFiles/homeworks.dir/build.make CMakeFiles/homeworks.dir/build
+.PHONY : homeworks/fast
 
-test/test.o: test/test.c.o
+homeworks/07_easy.o: homeworks/07_easy.c.o
 
-.PHONY : test/test.o
+.PHONY : homeworks/07_easy.o
 
 # target to build an object file
-test/test.c.o:
-	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/test/test.c.o
-.PHONY : test/test.c.o
+homeworks/07_easy.c.o:
+	$(MAKE) -f CMakeFiles/homeworks.dir/build.make CMakeFiles/homeworks.dir/homeworks/07_easy.c.o
+.PHONY : homeworks/07_easy.c.o
 
-test/test.i: test/test.c.i
+homeworks/07_easy.i: homeworks/07_easy.c.i
 
-.PHONY : test/test.i
+.PHONY : homeworks/07_easy.i
 
 # target to preprocess a source file
-test/test.c.i:
-	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/test/test.c.i
-.PHONY : test/test.c.i
+homeworks/07_easy.c.i:
+	$(MAKE) -f CMakeFiles/homeworks.dir/build.make CMakeFiles/homeworks.dir/homeworks/07_easy.c.i
+.PHONY : homeworks/07_easy.c.i
 
-test/test.s: test/test.c.s
+homeworks/07_easy.s: homeworks/07_easy.c.s
 
-.PHONY : test/test.s
+.PHONY : homeworks/07_easy.s
 
 # target to generate assembly for a file
-test/test.c.s:
-	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/test/test.c.s
-.PHONY : test/test.c.s
+homeworks/07_easy.c.s:
+	$(MAKE) -f CMakeFiles/homeworks.dir/build.make CMakeFiles/homeworks.dir/homeworks/07_easy.c.s
+.PHONY : homeworks/07_easy.c.s
 
 # Help Target
 help:
@@ -157,11 +157,11 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... rebuild_cache"
-	@echo "... test"
+	@echo "... homeworks"
 	@echo "... edit_cache"
-	@echo "... test/test.o"
-	@echo "... test/test.i"
-	@echo "... test/test.s"
+	@echo "... homeworks/07_easy.o"
+	@echo "... homeworks/07_easy.i"
+	@echo "... homeworks/07_easy.s"
 .PHONY : help
 
 

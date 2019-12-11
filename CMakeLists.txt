@@ -3,8 +3,8 @@ project(homeworks)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(test
-        test/test.c)
+#add_executable(test
+#        test/test.c)
 
 #add_executable(homeworks
 #        homeworks/01_easy/01_easy_v1.c)
@@ -31,3 +31,6 @@ add_executable(test
 
 #add_executable(homeworks
 #        homeworks/06_hard/06_hard_v1.c)
+
+add_executable(homeworks
+        homeworks/07_easy.c)
