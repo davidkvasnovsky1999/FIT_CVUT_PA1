@@ -1,4 +1,4 @@
-# Install script for directory: /home/david/CLionProjects/PA1
+# Install script for directory: /data/David/synced/computers/software/projects/fit_cvut_projects/pa1
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -45,5 +45,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/david/CLionProjects/PA1/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/data/David/synced/computers/software/projects/fit_cvut_projects/pa1/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
