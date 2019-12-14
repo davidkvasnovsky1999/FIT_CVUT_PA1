@@ -57,27 +57,27 @@ include CMakeFiles/homeworks.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/homeworks.dir/flags.make
 
-CMakeFiles/homeworks.dir/homeworks/07_easy.c.o: CMakeFiles/homeworks.dir/flags.make
-CMakeFiles/homeworks.dir/homeworks/07_easy.c.o: ../homeworks/07_easy.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/data/David/synced/computers/software/projects/fit_cvut_projects/pa1/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/homeworks.dir/homeworks/07_easy.c.o"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/homeworks.dir/homeworks/07_easy.c.o   -c /data/David/synced/computers/software/projects/fit_cvut_projects/pa1/homeworks/07_easy.c
+CMakeFiles/homeworks.dir/homeworks/07_hard/07_hard_v1.c.o: CMakeFiles/homeworks.dir/flags.make
+CMakeFiles/homeworks.dir/homeworks/07_hard/07_hard_v1.c.o: ../homeworks/07_hard/07_hard_v1.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/data/David/synced/computers/software/projects/fit_cvut_projects/pa1/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/homeworks.dir/homeworks/07_hard/07_hard_v1.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/homeworks.dir/homeworks/07_hard/07_hard_v1.c.o   -c /data/David/synced/computers/software/projects/fit_cvut_projects/pa1/homeworks/07_hard/07_hard_v1.c
 
-CMakeFiles/homeworks.dir/homeworks/07_easy.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/homeworks.dir/homeworks/07_easy.c.i"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /data/David/synced/computers/software/projects/fit_cvut_projects/pa1/homeworks/07_easy.c > CMakeFiles/homeworks.dir/homeworks/07_easy.c.i
+CMakeFiles/homeworks.dir/homeworks/07_hard/07_hard_v1.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/homeworks.dir/homeworks/07_hard/07_hard_v1.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /data/David/synced/computers/software/projects/fit_cvut_projects/pa1/homeworks/07_hard/07_hard_v1.c > CMakeFiles/homeworks.dir/homeworks/07_hard/07_hard_v1.c.i
 
-CMakeFiles/homeworks.dir/homeworks/07_easy.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/homeworks.dir/homeworks/07_easy.c.s"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /data/David/synced/computers/software/projects/fit_cvut_projects/pa1/homeworks/07_easy.c -o CMakeFiles/homeworks.dir/homeworks/07_easy.c.s
+CMakeFiles/homeworks.dir/homeworks/07_hard/07_hard_v1.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/homeworks.dir/homeworks/07_hard/07_hard_v1.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /data/David/synced/computers/software/projects/fit_cvut_projects/pa1/homeworks/07_hard/07_hard_v1.c -o CMakeFiles/homeworks.dir/homeworks/07_hard/07_hard_v1.c.s
 
 # Object files for target homeworks
 homeworks_OBJECTS = \
-"CMakeFiles/homeworks.dir/homeworks/07_easy.c.o"
+"CMakeFiles/homeworks.dir/homeworks/07_hard/07_hard_v1.c.o"
 
 # External object files for target homeworks
 homeworks_EXTERNAL_OBJECTS =
 
-homeworks: CMakeFiles/homeworks.dir/homeworks/07_easy.c.o
+homeworks: CMakeFiles/homeworks.dir/homeworks/07_hard/07_hard_v1.c.o
 homeworks: CMakeFiles/homeworks.dir/build.make
 homeworks: CMakeFiles/homeworks.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/data/David/synced/computers/software/projects/fit_cvut_projects/pa1/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking C executable homeworks"

@@ -5,6 +5,8 @@
 #include <string.h>
 #include <float.h>
 
+#define NUMBER_OF_PLATES_CHILDREN 2
+#define MAX_PLATES_ASPECT_RATIO 2
 #define true 1
 #define false 0
 
@@ -32,6 +34,7 @@ void                freePlatesRecursively                   ( Plate             
         {
             freePlatesRecursively ( (*plate)->children );
             freePlatesRecursively ( (*plate)->children + 1 );
+            free ( (*plate)->children );
         }
         free ( *plate );
         *plate = NULL;
@@ -50,8 +53,8 @@ void                freePlatesContainer                     ( PlatesContainer   
     }
 }
 
-void                copyPlatesValuesToAnother               ( Plate                     * source,
-                                                              Plate                     * target )
+void                copyPlatesValuesFrom1stTo2nd               ( Plate                     * source,
+                                                                 Plate                     * target )
 {
     if ( source != NULL && target != NULL )
     {
@@ -75,18 +78,11 @@ void                swapULLs                                ( unsigned long long
 PlatesContainer *   getInitializedPlatesContainer           (  )
 {
     PlatesContainer * pPlatesContainer = NULL;
-    if
-    (
-            ( pPlatesContainer              = ( PlatesContainer * ) malloc ( sizeof ( pPlatesContainer ) ) ) == NULL
-            ||
-//            ( pPlatesContainer->plates      = ( Plate * )           malloc ( sizeof ( Plate ) ) )            == NULL
-//            ||
-            ( pPlatesContainer->rootPlate   = ( Plate * )           malloc ( sizeof ( Plate ) ) )            == NULL
-    )
+    if ( ( pPlatesContainer = ( PlatesContainer * ) malloc ( sizeof ( PlatesContainer ) ) ) == NULL )
             exit ( 1 );
-    pPlatesContainer->platesMaxArea             = -1;
-//    pPlatesContainer->numberOfAllocatedPlates   = 1;
-    pPlatesContainer->numberOfCuts            = 0;
+    pPlatesContainer->platesMaxArea = -1;
+    pPlatesContainer->numberOfCuts  = 0;
+    pPlatesContainer->rootPlate     = NULL;
     return pPlatesContainer;
 }
 
@@ -96,16 +92,27 @@ int                getRootPlate                            ( Plate              
         return 0;
     if ( ( *rootPlate == NULL && ( *rootPlate = ( Plate * ) malloc ( sizeof ( Plate ) ) ) == NULL ) )
         exit ( 1 );
+    (*rootPlate)->children = NULL;
     printf ( "Velikost:\n" );
-    return 2 == scanf ( "%lld %lld", &( ( *rootPlate )->x ), &( ( *rootPlate )->y ) );
+    long long x, y;
+    if ( scanf ( "%lld %lld", &x, &y ) != 2 || x < 1 || y < 0 )
+        return 0;
+    ( *rootPlate )->x = x;
+    ( *rootPlate )->y = y;
+    return 1;
 }
 
-long long           getMaxArea                              (  )
+char                getMaxArea                              ( unsigned long long        * pMaxArea )
 {
-    long long maxArea = 0;
+    if ( pMaxArea == NULL )
+        return 0;
+    long long tempMaxArea = 0;
     printf ( "Maximalni plocha:\n" );
-    scanf ( "%llu", &maxArea );
-    return maxArea;
+    scanf ( "%lld", &tempMaxArea );
+    if ( tempMaxArea < 1 )
+        return 0;
+    *pMaxArea = ( unsigned long long ) tempMaxArea;
+    return 1;
 }
 
 int                 getInputData                            ( PlatesContainer          ** pPlatesContainer )
@@ -114,9 +121,8 @@ int                 getInputData                            ( PlatesContainer   
         return 0;
     if ( ( *pPlatesContainer = getInitializedPlatesContainer ( ) ) == NULL )
         exit ( 1 );
-    if ( getRootPlate ( &((*pPlatesContainer)->rootPlate) ) == 0 )
-        return 0;
-    if ( ( (*pPlatesContainer)->platesMaxArea = getMaxArea ( ) ) < 1 )
+    if ( getRootPlate ( &( (*pPlatesContainer)->rootPlate     ) ) != 1
+      || getMaxArea   ( &( (*pPlatesContainer)->platesMaxArea ) ) != 1 )
         return 0;
     return 1;
 }
@@ -126,15 +132,16 @@ char                compareLongDoubles                      ( const long double 
 {
     if ( fabsl ( a - b ) < 1024 * LDBL_EPSILON * a * b )
         return 0;
-    return a > b ? -1 : 1;
+    return a > b ? 1 : -1;
 }
 
 long double         getPlatesAspectRatio                    ( const Plate                 plate )
 {
-    if ( plate.x > plate.y )
-        return ( long double ) plate.x / ( long double ) plate.y;
-    else
-        return ( long double ) plate.y / ( long double ) plate.x;
+    unsigned long long  x = plate.x,
+                        y = plate.y;
+    if ( plate.x < plate.y )
+        swapULLs ( &x, &y );
+    return ( long double ) x / ( long double ) y;
 }
 
 unsigned long long  splitPlate                              ( const unsigned long long    platesMaxArea,
@@ -142,46 +149,64 @@ unsigned long long  splitPlate                              ( const unsigned lon
                                                               Plate                     * plateToCut )
 {
     if ( plateToCut->x * plateToCut->y <= platesMaxArea
-    && compareLongDoubles ( getPlatesAspectRatio ( *plateToCut ), platesMaxAspectRatio ) != -1 )
+    && compareLongDoubles ( getPlatesAspectRatio ( *plateToCut ), platesMaxAspectRatio ) != 1 )
         return 0;
     else
     {
-        const char          numberOfChildren    = 2;
         unsigned long long  numberOfSplits      = -1,
                             tempNumOfSplits     = 0;
-        Plate ** children = ( Plate ** ) malloc ( sizeof ( Plate * ) * numberOfChildren );
-        *( children + 0 )  = ( Plate * ) malloc ( sizeof ( Plate ) );
-        *( children + 1 )  = ( Plate * ) malloc ( sizeof ( Plate ) );
-        for ( char i = 0; i < numberOfChildren; i ++ )
+        Plate ** children       = ( Plate ** ) malloc ( sizeof ( Plate * ) * NUMBER_OF_PLATES_CHILDREN );
+        Plate ** tempChildren   = ( Plate ** ) malloc ( sizeof ( Plate * ) * NUMBER_OF_PLATES_CHILDREN );
+        for ( char i = 0; i < NUMBER_OF_PLATES_CHILDREN; i ++ )
         {
             swapULLs ( &(plateToCut->x), &(plateToCut->y) );
             for ( unsigned long long j = 1; j <= ( plateToCut->x / 2 ); j ++  )
             {
-                Plate * tempPlateA = ( Plate * ) malloc ( sizeof ( Plate ) );
-                Plate * tempPlateB = ( Plate * ) malloc ( sizeof ( Plate ) );
-                copyPlatesValuesToAnother ( plateToCut, tempPlateA );
-                copyPlatesValuesToAnother ( plateToCut, tempPlateB );
-                (*( plateToCut->children + 0 ))->x -= 1;
-                (*( plateToCut->children + 1 ))->x = j;
-                tempNumOfSplits = splitPlate ( platesMaxArea, platesMaxAspectRatio, tempPlateA )
-                                + splitPlate ( platesMaxArea, platesMaxAspectRatio, tempPlateB ) + 1;
+                for ( char k = 0; k < NUMBER_OF_PLATES_CHILDREN; k ++ )
+                {
+                    *( tempChildren + k ) = ( Plate * ) malloc ( sizeof ( Plate ) );
+                    copyPlatesValuesFrom1stTo2nd ( plateToCut, *( tempChildren + k ) );
+                }
+                (*( tempChildren + 0 ))->x -= j;
+                (*( tempChildren + 1 ))->x = j;
+                tempNumOfSplits = splitPlate ( platesMaxArea, platesMaxAspectRatio, *( tempChildren + 0 ) )
+                                + splitPlate ( platesMaxArea, platesMaxAspectRatio, *( tempChildren + 1 ) ) + 1;
                 if ( tempNumOfSplits < numberOfSplits )
                 {
-                    freePlatesRecursively ( children );
-                    freePlatesRecursively ( children + 1 );
                     numberOfSplits = tempNumOfSplits;
-                    *( children + 0 ) = tempPlateA;
-                    *( children + 1 ) = tempPlateB;
+                    for ( char k = 0; k < NUMBER_OF_PLATES_CHILDREN; k ++ )
+                    {
+                        freePlatesRecursively ( children + k );
+                        *( children + k ) = *( tempChildren + k );
+                    }
                 }
                 else
                 {
-                    freePlatesRecursively ( &tempPlateA );
-                    freePlatesRecursively ( &tempPlateB );
+                    freePlatesRecursively ( tempChildren + 0 );
+                    freePlatesRecursively ( tempChildren + 1 );
                 }
             }
         }
+        free ( tempChildren );
         plateToCut->children = children;
         return numberOfSplits;
+    }
+}
+
+void                printPlateCuttingTree                   ( Plate                     * plate,
+                                                              unsigned long long          level )
+{
+    if ( plate != NULL )
+    {
+        for ( unsigned long long i = 0; i < level; i ++ )
+            printf (" ");
+        printf ( "[ %llu, %llu ]\n", plate->x, plate->y );
+        if ( plate->children != NULL )
+        {
+            level ++;
+            printPlateCuttingTree ( *( plate->children + 0 ), level );
+            printPlateCuttingTree ( *( plate->children + 1 ), level );
+        }
     }
 }
 
@@ -190,7 +215,8 @@ int                 main                                    (  )
     PlatesContainer * platesContainer = NULL;
     if ( getInputData ( &platesContainer ) > 0 )
     {
-        platesContainer->numberOfCuts = splitPlate ( platesContainer->platesMaxArea, 2 ,platesContainer->rootPlate );
+        platesContainer->numberOfCuts = splitPlate ( platesContainer->platesMaxArea, MAX_PLATES_ASPECT_RATIO ,platesContainer->rootPlate );
+        printPlateCuttingTree ( platesContainer->rootPlate, 0 );
     }
     else
         printf ( "Nespravny vstup.\n" );
