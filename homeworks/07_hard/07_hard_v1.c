@@ -53,8 +53,8 @@ void                freePlatesContainer                     ( PlatesContainer   
     }
 }
 
-void                copyPlatesValuesFrom1stTo2nd               ( Plate                     * source,
-                                                                 Plate                     * target )
+void                copyPlatesValuesFrom1stTo2nd            ( Plate                     * source,
+                                                              Plate                     * target )
 {
     if ( source != NULL && target != NULL )
     {
@@ -158,19 +158,23 @@ unsigned long long  splitPlate                              ( const unsigned lon
         Plate ** children       = ( Plate ** ) malloc ( sizeof ( Plate * ) * NUMBER_OF_PLATES_CHILDREN );
         Plate ** tempChildren   = ( Plate ** ) malloc ( sizeof ( Plate * ) * NUMBER_OF_PLATES_CHILDREN );
         for ( char i = 0; i < NUMBER_OF_PLATES_CHILDREN; i ++ )
+            *( children + i ) = NULL;
+        for ( char i = 0; i < 2; i ++ ) //In first and second iteration we cut plate by y and x dimension respectively.
         {
-            swapULLs ( &(plateToCut->x), &(plateToCut->y) );
-            for ( unsigned long long j = 1; j <= ( plateToCut->x / 2 ); j ++  )
+            for ( unsigned long long j = 0; j < ( plateToCut->x / 2 ); j ++  )
             {
                 for ( char k = 0; k < NUMBER_OF_PLATES_CHILDREN; k ++ )
                 {
                     *( tempChildren + k ) = ( Plate * ) malloc ( sizeof ( Plate ) );
                     copyPlatesValuesFrom1stTo2nd ( plateToCut, *( tempChildren + k ) );
                 }
-                (*( tempChildren + 0 ))->x -= j;
-                (*( tempChildren + 1 ))->x = j;
-                tempNumOfSplits = splitPlate ( platesMaxArea, platesMaxAspectRatio, *( tempChildren + 0 ) )
-                                + splitPlate ( platesMaxArea, platesMaxAspectRatio, *( tempChildren + 1 ) ) + 1;
+                (*( tempChildren + 0 ))->x = plateToCut->x / 2 + j;
+                (*( tempChildren + 1 ))->x = plateToCut->x / 2 - j;
+                if ( plateToCut->x % 2 != 0 )
+                    (*( tempChildren + 0 ))->x += 1;
+                tempNumOfSplits = 1
+                                + splitPlate ( platesMaxArea, platesMaxAspectRatio, *( tempChildren + 0 ) )
+                                + splitPlate ( platesMaxArea, platesMaxAspectRatio, *( tempChildren + 1 ) );
                 if ( tempNumOfSplits < numberOfSplits )
                 {
                     numberOfSplits = tempNumOfSplits;
@@ -186,6 +190,7 @@ unsigned long long  splitPlate                              ( const unsigned lon
                     freePlatesRecursively ( tempChildren + 1 );
                 }
             }
+            swapULLs ( &(plateToCut->x), &(plateToCut->y) );
         }
         free ( tempChildren );
         plateToCut->children = children;
@@ -194,18 +199,26 @@ unsigned long long  splitPlate                              ( const unsigned lon
 }
 
 void                printPlateCuttingTree                   ( Plate                     * plate,
-                                                              unsigned long long          level )
+                                                              unsigned long long          level,
+                                                              char                      * formatPrefix,
+                                                              boolean                     firstChild )
 {
     if ( plate != NULL )
     {
-        for ( unsigned long long i = 0; i < level; i ++ )
-            printf (" ");
-        printf ( "[ %llu, %llu ]\n", plate->x, plate->y );
+        printf ("%s", formatPrefix );
+        char c = '+';
+        *( formatPrefix + level ) = '|';
+        if ( !firstChild )
+        {
+            c = '\\';
+            *( formatPrefix + level ) = ' ';
+        }
+        printf ( "%c-[%llu, %llu]\n", c, plate->x, plate->y );
         if ( plate->children != NULL )
         {
             level ++;
-            printPlateCuttingTree ( *( plate->children + 0 ), level );
-            printPlateCuttingTree ( *( plate->children + 1 ), level );
+            printPlateCuttingTree ( *( plate->children + 0 ), level, formatPrefix, true );
+            printPlateCuttingTree ( *( plate->children + 1 ), level, formatPrefix, false );
         }
     }
 }
@@ -216,7 +229,10 @@ int                 main                                    (  )
     if ( getInputData ( &platesContainer ) > 0 )
     {
         platesContainer->numberOfCuts = splitPlate ( platesContainer->platesMaxArea, MAX_PLATES_ASPECT_RATIO ,platesContainer->rootPlate );
-        printPlateCuttingTree ( platesContainer->rootPlate, 0 );
+        printf ( "Rezu: %llu\n", platesContainer->numberOfCuts );
+        char * formatPrefix = ( char * ) calloc ( platesContainer->numberOfCuts, sizeof ( char ) );
+        printPlateCuttingTree ( platesContainer->rootPlate, 0, formatPrefix, true );
+        free ( formatPrefix );
     }
     else
         printf ( "Nespravny vstup.\n" );
