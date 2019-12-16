@@ -123,32 +123,32 @@ homeworks/fast:
 	$(MAKE) -f CMakeFiles/homeworks.dir/build.make CMakeFiles/homeworks.dir/build
 .PHONY : homeworks/fast
 
-homeworks/07_hard/07_hard_v1.o: homeworks/07_hard/07_hard_v1.c.o
+homeworks/07_hard/07_hard_v2.o: homeworks/07_hard/07_hard_v2.c.o
 
-.PHONY : homeworks/07_hard/07_hard_v1.o
+.PHONY : homeworks/07_hard/07_hard_v2.o
 
 # target to build an object file
-homeworks/07_hard/07_hard_v1.c.o:
-	$(MAKE) -f CMakeFiles/homeworks.dir/build.make CMakeFiles/homeworks.dir/homeworks/07_hard/07_hard_v1.c.o
-.PHONY : homeworks/07_hard/07_hard_v1.c.o
+homeworks/07_hard/07_hard_v2.c.o:
+	$(MAKE) -f CMakeFiles/homeworks.dir/build.make CMakeFiles/homeworks.dir/homeworks/07_hard/07_hard_v2.c.o
+.PHONY : homeworks/07_hard/07_hard_v2.c.o
 
-homeworks/07_hard/07_hard_v1.i: homeworks/07_hard/07_hard_v1.c.i
+homeworks/07_hard/07_hard_v2.i: homeworks/07_hard/07_hard_v2.c.i
 
-.PHONY : homeworks/07_hard/07_hard_v1.i
+.PHONY : homeworks/07_hard/07_hard_v2.i
 
 # target to preprocess a source file
-homeworks/07_hard/07_hard_v1.c.i:
-	$(MAKE) -f CMakeFiles/homeworks.dir/build.make CMakeFiles/homeworks.dir/homeworks/07_hard/07_hard_v1.c.i
-.PHONY : homeworks/07_hard/07_hard_v1.c.i
+homeworks/07_hard/07_hard_v2.c.i:
+	$(MAKE) -f CMakeFiles/homeworks.dir/build.make CMakeFiles/homeworks.dir/homeworks/07_hard/07_hard_v2.c.i
+.PHONY : homeworks/07_hard/07_hard_v2.c.i
 
-homeworks/07_hard/07_hard_v1.s: homeworks/07_hard/07_hard_v1.c.s
+homeworks/07_hard/07_hard_v2.s: homeworks/07_hard/07_hard_v2.c.s
 
-.PHONY : homeworks/07_hard/07_hard_v1.s
+.PHONY : homeworks/07_hard/07_hard_v2.s
 
 # target to generate assembly for a file
-homeworks/07_hard/07_hard_v1.c.s:
-	$(MAKE) -f CMakeFiles/homeworks.dir/build.make CMakeFiles/homeworks.dir/homeworks/07_hard/07_hard_v1.c.s
-.PHONY : homeworks/07_hard/07_hard_v1.c.s
+homeworks/07_hard/07_hard_v2.c.s:
+	$(MAKE) -f CMakeFiles/homeworks.dir/build.make CMakeFiles/homeworks.dir/homeworks/07_hard/07_hard_v2.c.s
+.PHONY : homeworks/07_hard/07_hard_v2.c.s
 
 # Help Target
 help:
@@ -159,9 +159,9 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... homeworks"
 	@echo "... edit_cache"
-	@echo "... homeworks/07_hard/07_hard_v1.o"
-	@echo "... homeworks/07_hard/07_hard_v1.i"
-	@echo "... homeworks/07_hard/07_hard_v1.s"
+	@echo "... homeworks/07_hard/07_hard_v2.o"
+	@echo "... homeworks/07_hard/07_hard_v2.i"
+	@echo "... homeworks/07_hard/07_hard_v2.s"
 .PHONY : help
 
 
