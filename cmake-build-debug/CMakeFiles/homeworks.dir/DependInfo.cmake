@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_C
-  "/data/David/synced/computers/software/projects/fit_cvut_projects/pa1/homeworks/07_hard/07_hard_v2.c" "/data/David/synced/computers/software/projects/fit_cvut_projects/pa1/cmake-build-debug/CMakeFiles/homeworks.dir/homeworks/07_hard/07_hard_v2.c.o"
+  "/data/David/synced/computers/software/projects/fit_cvut_projects/pa1/homeworks/08_easy/08_easy_v1.c" "/data/David/synced/computers/software/projects/fit_cvut_projects/pa1/cmake-build-debug/CMakeFiles/homeworks.dir/homeworks/08_easy/08_easy_v1.c.o"
   )
 set(CMAKE_C_COMPILER_ID "GNU")
 
