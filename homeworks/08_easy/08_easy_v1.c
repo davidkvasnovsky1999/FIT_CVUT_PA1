@@ -10,6 +10,11 @@
 #define TYPE_MAX           100
 #define SETUP_MAX          100
 
+#define true 1
+#define false 0
+
+typedef char boolean;
+
 typedef struct TEngine
 {
   struct TEngine * m_Next;
@@ -44,7 +49,7 @@ char                findPtrByYearWhereArchiveShouldBeSaved  ( const int         
     {
         while ( **ptrToWhereTheArchiveSBS != NULL )
         {
-            if ( (**ptrToWhereTheArchiveSBS)->m_Engines != NULL && year >= (**ptrToWhereTheArchiveSBS)->m_Engines->m_Year )
+            if ( (**ptrToWhereTheArchiveSBS)->m_Engines != NULL && year <= (**ptrToWhereTheArchiveSBS)->m_Engines->m_Year )
             {
                 if ( year == (**ptrToWhereTheArchiveSBS)->m_Engines->m_Year )
                     return 1;
@@ -131,9 +136,19 @@ void                deleteEngines                           ( TENGINE         * 
     }
 }
 
+void                deleteArchivesWithoutEngines            ( TARCHIVE        * list )
+{
+    if ( list != NULL )
+    {
+        deleteArchivesWithoutEngines ( list->m_Next );
+        list->m_Next = NULL;
+        free ( list );
+    }
+}
+
 void                DelArchive                              ( TARCHIVE        * list )
 {
-    if ( list->m_Next != NULL )
+    if ( list != NULL )
     {
         DelArchive ( list->m_Next );
         list->m_Next = NULL;
@@ -142,22 +157,109 @@ void                DelArchive                              ( TARCHIVE        * 
     }
 }
 
+char                getArrayOfTEnginePtrsFromEveryTArchive  ( TARCHIVE        * list,
+                                                              TENGINE       *** listOfEnginesPointers,
+                                                              unsigned long   * numberOfEngines )
+{
+    if ( listOfEnginesPointers == NULL )
+        return 0;
+    size_t numberOfAllocatedTEPointers = 128;
+    *numberOfEngines = 0;
+    if ( *listOfEnginesPointers != NULL )
+        free ( *listOfEnginesPointers );
+    *listOfEnginesPointers = ( TENGINE ** ) malloc ( sizeof ( TENGINE * ) * numberOfAllocatedTEPointers );
+    while ( list != NULL )
+    {
+        TENGINE * walkEngine = list->m_Engines;
+        while ( walkEngine != NULL )
+        {
+            ( *numberOfEngines ) ++;
+            if ( *numberOfEngines >= numberOfAllocatedTEPointers )
+            {
+                numberOfAllocatedTEPointers *= 2;
+                *listOfEnginesPointers = ( TENGINE ** ) realloc ( *listOfEnginesPointers, sizeof ( TENGINE * ) * numberOfAllocatedTEPointers );
+            }
+            *( (*listOfEnginesPointers) + (*numberOfEngines) - 1 ) = walkEngine;
+            walkEngine = walkEngine->m_Next;
+        }
+        list = list->m_Next;
+    }
+    if ( *numberOfEngines > 0 )
+        *listOfEnginesPointers = ( TENGINE ** ) realloc ( *listOfEnginesPointers, sizeof ( TENGINE * ) * ( *numberOfEngines ) );
+    else
+    {
+        free ( *listOfEnginesPointers );
+        *listOfEnginesPointers = NULL;
+    }
+    return 1;
+}
+
+int                 compareEnginesByYear                    ( const void      * a,
+                                                              const void      * b )
+{
+    TENGINE ** engineA = ( TENGINE ** ) a,
+            ** engineB = ( TENGINE ** ) b;
+    if ( (*engineA)->m_Year == (*engineB)->m_Year )
+        return strcmp ( (*engineA)->m_Type, (*engineB)->m_Type );
+    return (*engineA)->m_Year > (*engineB)->m_Year ?  1 : -1;
+}
+
+int                 compareEnginesByType                    ( const void      * a,
+                                                              const void      * b )
+{
+    TENGINE ** engineA = ( TENGINE ** ) a,
+            ** engineB = ( TENGINE ** ) b;
+    int strcmpRet = strcmp ( (*engineA)->m_Type, (*engineB)->m_Type );
+    if ( strcmpRet == 0 )
+        return (*engineA)->m_Year > (*engineB)->m_Year ?  1 : -1;
+    return strcmpRet;
+}
+
 TARCHIVE          * ReorderArchive                          ( TARCHIVE        * list,
                                                               int               listBy )
 {
-    TARCHIVE ** headPtr = &list;
-    if ( list != NULL )
+    TARCHIVE         * headPtr                  = NULL;
+    TENGINE         ** listOfEnginesPointers    = NULL;
+    unsigned long      numberOfEngines          = 0;
+    getArrayOfTEnginePtrsFromEveryTArchive ( list, &listOfEnginesPointers, &numberOfEngines );
+    if      ( numberOfEngines > 0 )
     {
+        headPtr = ( TARCHIVE * ) malloc ( sizeof ( TARCHIVE ) );
+        headPtr->m_Engines = NULL;
+        headPtr->m_Next = NULL;
         if      ( listBy == LIST_BY_YEAR )
-        {
-        
-        }
+            qsort ( listOfEnginesPointers, numberOfEngines, sizeof ( TENGINE ), compareEnginesByYear );
         else if ( listBy == LIST_BY_TYPE )
+            qsort ( listOfEnginesPointers, numberOfEngines, sizeof ( TENGINE ), compareEnginesByType );
+        else
+            return list;
+        deleteArchivesWithoutEngines ( list );
+        int         yearOfPrevEngine = ( *listOfEnginesPointers )->m_Year;
+        char      * typeOfPrevEngine = ( *listOfEnginesPointers )->m_Type;
+        TARCHIVE  * walkedArchive    = headPtr;
+        TENGINE  ** ptrToSaveEngine  = &( headPtr->m_Engines );
+        for ( unsigned long long i = 0; i < numberOfEngines; i ++ )
         {
-        
+            TENGINE * iterEngine = ( *( listOfEnginesPointers + i ) );
+            if ( ( listBy == LIST_BY_YEAR && yearOfPrevEngine != iterEngine->m_Year )
+              || ( listBy == LIST_BY_TYPE && typeOfPrevEngine != iterEngine->m_Type ))
+            {
+                *ptrToSaveEngine = NULL;
+                walkedArchive->m_Next = ( TARCHIVE * ) malloc ( sizeof ( TARCHIVE ) );
+                walkedArchive = walkedArchive->m_Next;
+                walkedArchive->m_Engines = NULL;
+                walkedArchive->m_Next = NULL;
+                ptrToSaveEngine = &( walkedArchive->m_Engines );
+            }
+            yearOfPrevEngine = iterEngine->m_Year;
+            typeOfPrevEngine = iterEngine->m_Type;
+            *ptrToSaveEngine = iterEngine;
+            ptrToSaveEngine = &( iterEngine->m_Next );
         }
+        *ptrToSaveEngine = NULL;
+        free ( listOfEnginesPointers );
     }
-    return *headPtr;
+    return headPtr;
 }
 
 #ifndef __PROGTEST__
