@@ -37,20 +37,45 @@ TENGINE           * createEngine                            ( const char      * 
 }
 #endif /* __PROGTEST__ */
 
-char                findPlaceWhereArchiveShouldBeSaved      ( const int         year,
+char                findPtrByYearWhereArchiveShouldBeSaved  ( const int         year,
                                                               TARCHIVE      *** ptrToWhereTheArchiveSBS )
 {
-    if ( ptrToWhereTheArchiveSBS == NULL || *ptrToWhereTheArchiveSBS == NULL )
-        return 0;
-    while ( **ptrToWhereTheArchiveSBS != NULL )
+    if ( ptrToWhereTheArchiveSBS != NULL && *ptrToWhereTheArchiveSBS != NULL )
     {
-        if ( (**ptrToWhereTheArchiveSBS)->m_Engines != NULL && year <= (**ptrToWhereTheArchiveSBS)->m_Engines->m_Year )
-            break;
-        *ptrToWhereTheArchiveSBS = &( ( **ptrToWhereTheArchiveSBS )->m_Next );
+        while ( **ptrToWhereTheArchiveSBS != NULL )
+        {
+            if ( (**ptrToWhereTheArchiveSBS)->m_Engines != NULL && year >= (**ptrToWhereTheArchiveSBS)->m_Engines->m_Year )
+            {
+                if ( year == (**ptrToWhereTheArchiveSBS)->m_Engines->m_Year )
+                    return 1;
+                return 0;
+            }
+            *ptrToWhereTheArchiveSBS = &( ( **ptrToWhereTheArchiveSBS )->m_Next );
+        }
     }
-    return 1;
+    return 0;
 }
 
+char                findPtrByTypeWhereArchiveShouldBeSaved  ( const char      * type,
+                                                              TARCHIVE      *** ptrToWhereTheArchiveSBS )
+{
+    if ( ptrToWhereTheArchiveSBS != NULL && *ptrToWhereTheArchiveSBS != NULL )
+    {
+        while ( **ptrToWhereTheArchiveSBS != NULL )
+        {
+            int strcmpRet;
+            if ( (**ptrToWhereTheArchiveSBS)->m_Engines != NULL
+            && ( strcmpRet = strcmp ( type, (**ptrToWhereTheArchiveSBS)->m_Engines->m_Type ) ) <= 0 )
+            {
+                if ( strcmpRet == 0 )
+                    return 1;
+                return 0;
+            }
+            *ptrToWhereTheArchiveSBS = &( ( **ptrToWhereTheArchiveSBS )->m_Next );
+        }
+    }
+    return 0;
+}
 
 
 TARCHIVE          * AddEngine                               ( TARCHIVE        * list,
@@ -58,26 +83,39 @@ TARCHIVE          * AddEngine                               ( TARCHIVE        * 
                                                               TENGINE         * engine )
 {
     TARCHIVE ** firstArchive = &list;
-    if ( list == NULL )
-        firstArchive = &list;
     if ( engine != NULL )
     {
-        if ( listBy == LIST_BY_YEAR )
+        TARCHIVE   ** ptrToWhereTheArchiveSBS = &list;
+        TENGINE    ** walkEnginePtr           = NULL;
+        if      ( listBy == LIST_BY_YEAR )
         {
-            TARCHIVE   ** ptrToWhereTheArchiveSBS = NULL;
-            TENGINE    ** walkEnginePtr         = NULL;
-            findArchiveByYearInOrderedList ( engine->m_Year, list, &foundArchive, &precedingArchive );
-            if ( foundArchive == NULL )
+            if ( findPtrByYearWhereArchiveShouldBeSaved ( engine->m_Year, &ptrToWhereTheArchiveSBS ) == 0 )
             {
-                foundArchive = ( TARCHIVE * ) malloc ( sizeof ( TARCHIVE ) );
-                foundArchive->m_Engines = NULL;
+                TARCHIVE * newArchive = ( TARCHIVE * ) malloc ( sizeof ( TARCHIVE ) );
+                newArchive->m_Engines = NULL;
+                newArchive->m_Next = *ptrToWhereTheArchiveSBS;
+                *ptrToWhereTheArchiveSBS = newArchive;
             }
-            walkEnginePtr = &( foundArchive->m_Engines );
+            walkEnginePtr = &( (*ptrToWhereTheArchiveSBS)->m_Engines );
             while ( *walkEnginePtr != NULL && strcmp ( (*walkEnginePtr)->m_Type, engine->m_Type ) < 0 )
                 walkEnginePtr = &( ( *walkEnginePtr )->m_Next );
             engine->m_Next = *walkEnginePtr;
             *walkEnginePtr = engine;
-            
+        }
+        else if ( listBy == LIST_BY_TYPE )
+        {
+            if ( findPtrByTypeWhereArchiveShouldBeSaved ( engine->m_Type, &ptrToWhereTheArchiveSBS ) == 0 )
+            {
+                TARCHIVE * newArchive = ( TARCHIVE * ) malloc ( sizeof ( TARCHIVE ) );
+                newArchive->m_Engines = NULL;
+                newArchive->m_Next = *ptrToWhereTheArchiveSBS;
+                *ptrToWhereTheArchiveSBS = newArchive;
+            }
+            walkEnginePtr = &( (*ptrToWhereTheArchiveSBS)->m_Engines );
+            while ( *walkEnginePtr != NULL && engine->m_Year >= (*walkEnginePtr)->m_Year )
+                walkEnginePtr = &( ( *walkEnginePtr )->m_Next );
+            engine->m_Next = *walkEnginePtr;
+            *walkEnginePtr = engine;
         }
     }
     return *firstArchive;
@@ -103,10 +141,23 @@ void                DelArchive                              ( TARCHIVE        * 
         free ( list );
     }
 }
+
 TARCHIVE          * ReorderArchive                          ( TARCHIVE        * list,
                                                               int               listBy )
 {
-  /* todo */
+    TARCHIVE ** headPtr = &list;
+    if ( list != NULL )
+    {
+        if      ( listBy == LIST_BY_YEAR )
+        {
+        
+        }
+        else if ( listBy == LIST_BY_TYPE )
+        {
+        
+        }
+    }
+    return *headPtr;
 }
 
 #ifndef __PROGTEST__
