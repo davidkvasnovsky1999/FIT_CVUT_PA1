@@ -123,32 +123,32 @@ homeworks/fast:
 	$(MAKE) -f CMakeFiles/homeworks.dir/build.make CMakeFiles/homeworks.dir/build
 .PHONY : homeworks/fast
 
-homeworks/08_easy/08_easy_v1.o: homeworks/08_easy/08_easy_v1.c.o
+homeworks/08_hard/08_hard_v1.o: homeworks/08_hard/08_hard_v1.c.o
 
-.PHONY : homeworks/08_easy/08_easy_v1.o
+.PHONY : homeworks/08_hard/08_hard_v1.o
 
 # target to build an object file
-homeworks/08_easy/08_easy_v1.c.o:
-	$(MAKE) -f CMakeFiles/homeworks.dir/build.make CMakeFiles/homeworks.dir/homeworks/08_easy/08_easy_v1.c.o
-.PHONY : homeworks/08_easy/08_easy_v1.c.o
+homeworks/08_hard/08_hard_v1.c.o:
+	$(MAKE) -f CMakeFiles/homeworks.dir/build.make CMakeFiles/homeworks.dir/homeworks/08_hard/08_hard_v1.c.o
+.PHONY : homeworks/08_hard/08_hard_v1.c.o
 
-homeworks/08_easy/08_easy_v1.i: homeworks/08_easy/08_easy_v1.c.i
+homeworks/08_hard/08_hard_v1.i: homeworks/08_hard/08_hard_v1.c.i
 
-.PHONY : homeworks/08_easy/08_easy_v1.i
+.PHONY : homeworks/08_hard/08_hard_v1.i
 
 # target to preprocess a source file
-homeworks/08_easy/08_easy_v1.c.i:
-	$(MAKE) -f CMakeFiles/homeworks.dir/build.make CMakeFiles/homeworks.dir/homeworks/08_easy/08_easy_v1.c.i
-.PHONY : homeworks/08_easy/08_easy_v1.c.i
+homeworks/08_hard/08_hard_v1.c.i:
+	$(MAKE) -f CMakeFiles/homeworks.dir/build.make CMakeFiles/homeworks.dir/homeworks/08_hard/08_hard_v1.c.i
+.PHONY : homeworks/08_hard/08_hard_v1.c.i
 
-homeworks/08_easy/08_easy_v1.s: homeworks/08_easy/08_easy_v1.c.s
+homeworks/08_hard/08_hard_v1.s: homeworks/08_hard/08_hard_v1.c.s
 
-.PHONY : homeworks/08_easy/08_easy_v1.s
+.PHONY : homeworks/08_hard/08_hard_v1.s
 
 # target to generate assembly for a file
-homeworks/08_easy/08_easy_v1.c.s:
-	$(MAKE) -f CMakeFiles/homeworks.dir/build.make CMakeFiles/homeworks.dir/homeworks/08_easy/08_easy_v1.c.s
-.PHONY : homeworks/08_easy/08_easy_v1.c.s
+homeworks/08_hard/08_hard_v1.c.s:
+	$(MAKE) -f CMakeFiles/homeworks.dir/build.make CMakeFiles/homeworks.dir/homeworks/08_hard/08_hard_v1.c.s
+.PHONY : homeworks/08_hard/08_hard_v1.c.s
 
 # Help Target
 help:
@@ -159,9 +159,9 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... homeworks"
 	@echo "... edit_cache"
-	@echo "... homeworks/08_easy/08_easy_v1.o"
-	@echo "... homeworks/08_easy/08_easy_v1.i"
-	@echo "... homeworks/08_easy/08_easy_v1.s"
+	@echo "... homeworks/08_hard/08_hard_v1.o"
+	@echo "... homeworks/08_hard/08_hard_v1.i"
+	@echo "... homeworks/08_hard/08_hard_v1.s"
 .PHONY : help
 
 

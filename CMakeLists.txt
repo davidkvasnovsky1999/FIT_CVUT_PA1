@@ -36,7 +36,7 @@ set(CMAKE_CXX_STANDARD 14)
 #        homeworks/07_hard/07_hard_v2.c)
 
 
-set(SOURCE_FILES homeworks/08_easy/08_easy_v1.c)
+set(SOURCE_FILES homeworks/08_hard/08_hard_v1.c)
 add_executable(homeworks ${SOURCE_FILES})
 
 target_link_libraries(homeworks m)
