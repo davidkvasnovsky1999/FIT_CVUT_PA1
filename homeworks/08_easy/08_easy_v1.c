@@ -224,7 +224,7 @@ TARCHIVE          * ReorderArchive                          ( TARCHIVE        * 
             if ( ( listBy == LIST_BY_YEAR && yearOfPrevEngine != iterEngine->m_Year )
               || ( listBy == LIST_BY_TYPE && strcmp ( typeOfPrevEngine, iterEngine->m_Type ) != 0 ) )
             {
-                *(&(walkedArchive->m_Next)) = ( TARCHIVE * ) malloc ( sizeof ( TARCHIVE ) );
+                walkedArchive->m_Next = ( TARCHIVE * ) malloc ( sizeof ( TARCHIVE ) );
                 walkedArchive = walkedArchive->m_Next;
                 walkedArchive->m_Engines = NULL;
                 walkedArchive->m_Next = NULL;

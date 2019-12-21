@@ -89,21 +89,25 @@ TARCHIVE *          AddEngine                               ( TARCHIVE        * 
         {
             TARCHIVE * newArchive = ( TARCHIVE * ) malloc ( sizeof ( TARCHIVE ) );
             newArchive->m_Engines = NULL;
-            newArchive->m_Next = *ptrToWhereTheArchiveSBS;
+            newArchive->m_Next = (*ptrToWhereTheArchiveSBS);
+            newArchive->m_Prev = (*ptrToWhereTheArchiveSBS)->m_Prev;
+            (*ptrToWhereTheArchiveSBS)->m_Prev = newArchive;
             *ptrToWhereTheArchiveSBS = newArchive;
         }
         walkEnginePtr = &( (*ptrToWhereTheArchiveSBS)->m_Engines );
         while
-                (
-                *walkEnginePtr != NULL
-                &&
-                (
-                        ( listBy == LIST_BY_YEAR && strcmp ( (*walkEnginePtr)->m_Type, engine->m_Type ) < 0 )
-                        ||
-                        ( listBy == LIST_BY_TYPE && engine->m_Year >= (*walkEnginePtr)->m_Year )
-                )
-                ) walkEnginePtr = &( ( *walkEnginePtr )->m_Next );
+        (
+            *walkEnginePtr != NULL
+            &&
+            (
+                ( listBy == LIST_BY_YEAR && strcmp ( (*walkEnginePtr)->m_Type, engine->m_Type ) < 0 )
+                ||
+                ( listBy == LIST_BY_TYPE && engine->m_Year >= (*walkEnginePtr)->m_Year )
+            )
+        ) walkEnginePtr = &( ( *walkEnginePtr )->m_Next );
         engine->m_Next = *walkEnginePtr;
+        engine->m_Prev = (*walkEnginePtr)->m_Prev;
+        (*walkEnginePtr)->m_Prev = engine;
         *walkEnginePtr = engine;
     }
     return *firstArchive;
@@ -213,32 +217,39 @@ TARCHIVE *          ReorderArchive                          ( TARCHIVE        * 
             qsort ( listOfEnginesPointers, numberOfEngines, sizeof ( TENGINE * ), compareEnginesByType );
         else
             return list;
-        headPtr = ( TARCHIVE * ) malloc ( sizeof ( TARCHIVE ) );
-        headPtr->m_Engines = NULL;
-        headPtr->m_Next = NULL;
-        deleteArchivesWithoutEngines ( list );
-        int         yearOfPrevEngine = ( *listOfEnginesPointers )->m_Year;
-        char      * typeOfPrevEngine = ( *listOfEnginesPointers )->m_Type;
-        TARCHIVE  * walkedArchive    = headPtr;
-        TENGINE  ** ptrToSaveEngine  = &( walkedArchive->m_Engines );
+    
         for ( unsigned long long i = 0; i < numberOfEngines; i ++ )
         {
             TENGINE * iterEngine = ( *( listOfEnginesPointers + i ) );
-            if ( ( listBy == LIST_BY_YEAR && yearOfPrevEngine != iterEngine->m_Year )
-              || ( listBy == LIST_BY_TYPE && strcmp ( typeOfPrevEngine, iterEngine->m_Type ) != 0 ) )
-            {
-                *(&(walkedArchive->m_Next)) = ( TARCHIVE * ) malloc ( sizeof ( TARCHIVE ) );
-                walkedArchive = walkedArchive->m_Next;
-                walkedArchive->m_Engines = NULL;
-                walkedArchive->m_Next = NULL;
-                ptrToSaveEngine = &( walkedArchive->m_Engines );
-            }
-            yearOfPrevEngine = iterEngine->m_Year;
-            typeOfPrevEngine = iterEngine->m_Type;
-            *ptrToSaveEngine = iterEngine;
-             ptrToSaveEngine = &( iterEngine->m_Next );
-            *ptrToSaveEngine = NULL;
+            headPtr = AddEngine ( headPtr, listBy, iterEngine );
         }
+        
+//        headPtr = ( TARCHIVE * ) malloc ( sizeof ( TARCHIVE ) );
+//        headPtr->m_Engines = NULL;
+//        headPtr->m_Next = NULL;
+//        deleteArchivesWithoutEngines ( list );
+//        int         yearOfPrevEngine = ( *listOfEnginesPointers )->m_Year;
+//        char      * typeOfPrevEngine = ( *listOfEnginesPointers )->m_Type;
+//        TARCHIVE  * walkedArchive    = headPtr;
+//        TENGINE  ** ptrToSaveEngine  = &( walkedArchive->m_Engines );
+//        for ( unsigned long long i = 0; i < numberOfEngines; i ++ )
+//        {
+//            TENGINE * iterEngine = ( *( listOfEnginesPointers + i ) );
+//            if ( ( listBy == LIST_BY_YEAR && yearOfPrevEngine != iterEngine->m_Year )
+//              || ( listBy == LIST_BY_TYPE && strcmp ( typeOfPrevEngine, iterEngine->m_Type ) != 0 ) )
+//            {
+//                *(&(walkedArchive->m_Next)) = ( TARCHIVE * ) malloc ( sizeof ( TARCHIVE ) );
+//                walkedArchive = walkedArchive->m_Next;
+//                walkedArchive->m_Engines = NULL;
+//                walkedArchive->m_Next = NULL;
+//                ptrToSaveEngine = &( walkedArchive->m_Engines );
+//            }
+//            yearOfPrevEngine = iterEngine->m_Year;
+//            typeOfPrevEngine = iterEngine->m_Type;
+//            *ptrToSaveEngine = iterEngine;
+//             ptrToSaveEngine = &( iterEngine->m_Next );
+//            *ptrToSaveEngine = NULL;
+//        }
         free ( listOfEnginesPointers );
     }
     return headPtr;
