@@ -82,7 +82,7 @@
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="/data/David/synced/computers/software/projects/fit_cvut_projects/pa1/homeworks/08_hard/08_hard_v2.c">
+		<Unit filename="/data/David/synced/computers/software/projects/fit_cvut_projects/pa1/homeworks/06_hard/06_hard_v1-for_review.c">
 			<Option target="homeworks"/>
 		</Unit>
 		<Unit filename="/data/David/synced/computers/software/projects/fit_cvut_projects/pa1/CMakeLists.txt">

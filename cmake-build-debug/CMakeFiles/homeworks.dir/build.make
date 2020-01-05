@@ -57,27 +57,27 @@ include CMakeFiles/homeworks.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/homeworks.dir/flags.make
 
-CMakeFiles/homeworks.dir/homeworks/08_hard/08_hard_v2.c.o: CMakeFiles/homeworks.dir/flags.make
-CMakeFiles/homeworks.dir/homeworks/08_hard/08_hard_v2.c.o: ../homeworks/08_hard/08_hard_v2.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/data/David/synced/computers/software/projects/fit_cvut_projects/pa1/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/homeworks.dir/homeworks/08_hard/08_hard_v2.c.o"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/homeworks.dir/homeworks/08_hard/08_hard_v2.c.o   -c /data/David/synced/computers/software/projects/fit_cvut_projects/pa1/homeworks/08_hard/08_hard_v2.c
+CMakeFiles/homeworks.dir/homeworks/06_hard/06_hard_v1-for_review.c.o: CMakeFiles/homeworks.dir/flags.make
+CMakeFiles/homeworks.dir/homeworks/06_hard/06_hard_v1-for_review.c.o: ../homeworks/06_hard/06_hard_v1-for_review.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/data/David/synced/computers/software/projects/fit_cvut_projects/pa1/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/homeworks.dir/homeworks/06_hard/06_hard_v1-for_review.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/homeworks.dir/homeworks/06_hard/06_hard_v1-for_review.c.o   -c /data/David/synced/computers/software/projects/fit_cvut_projects/pa1/homeworks/06_hard/06_hard_v1-for_review.c
 
-CMakeFiles/homeworks.dir/homeworks/08_hard/08_hard_v2.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/homeworks.dir/homeworks/08_hard/08_hard_v2.c.i"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /data/David/synced/computers/software/projects/fit_cvut_projects/pa1/homeworks/08_hard/08_hard_v2.c > CMakeFiles/homeworks.dir/homeworks/08_hard/08_hard_v2.c.i
+CMakeFiles/homeworks.dir/homeworks/06_hard/06_hard_v1-for_review.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/homeworks.dir/homeworks/06_hard/06_hard_v1-for_review.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /data/David/synced/computers/software/projects/fit_cvut_projects/pa1/homeworks/06_hard/06_hard_v1-for_review.c > CMakeFiles/homeworks.dir/homeworks/06_hard/06_hard_v1-for_review.c.i
 
-CMakeFiles/homeworks.dir/homeworks/08_hard/08_hard_v2.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/homeworks.dir/homeworks/08_hard/08_hard_v2.c.s"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /data/David/synced/computers/software/projects/fit_cvut_projects/pa1/homeworks/08_hard/08_hard_v2.c -o CMakeFiles/homeworks.dir/homeworks/08_hard/08_hard_v2.c.s
+CMakeFiles/homeworks.dir/homeworks/06_hard/06_hard_v1-for_review.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/homeworks.dir/homeworks/06_hard/06_hard_v1-for_review.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /data/David/synced/computers/software/projects/fit_cvut_projects/pa1/homeworks/06_hard/06_hard_v1-for_review.c -o CMakeFiles/homeworks.dir/homeworks/06_hard/06_hard_v1-for_review.c.s
 
 # Object files for target homeworks
 homeworks_OBJECTS = \
-"CMakeFiles/homeworks.dir/homeworks/08_hard/08_hard_v2.c.o"
+"CMakeFiles/homeworks.dir/homeworks/06_hard/06_hard_v1-for_review.c.o"
 
 # External object files for target homeworks
 homeworks_EXTERNAL_OBJECTS =
 
-homeworks: CMakeFiles/homeworks.dir/homeworks/08_hard/08_hard_v2.c.o
+homeworks: CMakeFiles/homeworks.dir/homeworks/06_hard/06_hard_v1-for_review.c.o
 homeworks: CMakeFiles/homeworks.dir/build.make
 homeworks: CMakeFiles/homeworks.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/data/David/synced/computers/software/projects/fit_cvut_projects/pa1/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking C executable homeworks"

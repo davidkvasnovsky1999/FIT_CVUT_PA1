@@ -123,32 +123,32 @@ homeworks/fast:
 	$(MAKE) -f CMakeFiles/homeworks.dir/build.make CMakeFiles/homeworks.dir/build
 .PHONY : homeworks/fast
 
-homeworks/08_hard/08_hard_v2.o: homeworks/08_hard/08_hard_v2.c.o
+homeworks/06_hard/06_hard_v1-for_review.o: homeworks/06_hard/06_hard_v1-for_review.c.o
 
-.PHONY : homeworks/08_hard/08_hard_v2.o
+.PHONY : homeworks/06_hard/06_hard_v1-for_review.o
 
 # target to build an object file
-homeworks/08_hard/08_hard_v2.c.o:
-	$(MAKE) -f CMakeFiles/homeworks.dir/build.make CMakeFiles/homeworks.dir/homeworks/08_hard/08_hard_v2.c.o
-.PHONY : homeworks/08_hard/08_hard_v2.c.o
+homeworks/06_hard/06_hard_v1-for_review.c.o:
+	$(MAKE) -f CMakeFiles/homeworks.dir/build.make CMakeFiles/homeworks.dir/homeworks/06_hard/06_hard_v1-for_review.c.o
+.PHONY : homeworks/06_hard/06_hard_v1-for_review.c.o
 
-homeworks/08_hard/08_hard_v2.i: homeworks/08_hard/08_hard_v2.c.i
+homeworks/06_hard/06_hard_v1-for_review.i: homeworks/06_hard/06_hard_v1-for_review.c.i
 
-.PHONY : homeworks/08_hard/08_hard_v2.i
+.PHONY : homeworks/06_hard/06_hard_v1-for_review.i
 
 # target to preprocess a source file
-homeworks/08_hard/08_hard_v2.c.i:
-	$(MAKE) -f CMakeFiles/homeworks.dir/build.make CMakeFiles/homeworks.dir/homeworks/08_hard/08_hard_v2.c.i
-.PHONY : homeworks/08_hard/08_hard_v2.c.i
+homeworks/06_hard/06_hard_v1-for_review.c.i:
+	$(MAKE) -f CMakeFiles/homeworks.dir/build.make CMakeFiles/homeworks.dir/homeworks/06_hard/06_hard_v1-for_review.c.i
+.PHONY : homeworks/06_hard/06_hard_v1-for_review.c.i
 
-homeworks/08_hard/08_hard_v2.s: homeworks/08_hard/08_hard_v2.c.s
+homeworks/06_hard/06_hard_v1-for_review.s: homeworks/06_hard/06_hard_v1-for_review.c.s
 
-.PHONY : homeworks/08_hard/08_hard_v2.s
+.PHONY : homeworks/06_hard/06_hard_v1-for_review.s
 
 # target to generate assembly for a file
-homeworks/08_hard/08_hard_v2.c.s:
-	$(MAKE) -f CMakeFiles/homeworks.dir/build.make CMakeFiles/homeworks.dir/homeworks/08_hard/08_hard_v2.c.s
-.PHONY : homeworks/08_hard/08_hard_v2.c.s
+homeworks/06_hard/06_hard_v1-for_review.c.s:
+	$(MAKE) -f CMakeFiles/homeworks.dir/build.make CMakeFiles/homeworks.dir/homeworks/06_hard/06_hard_v1-for_review.c.s
+.PHONY : homeworks/06_hard/06_hard_v1-for_review.c.s
 
 # Help Target
 help:
@@ -159,9 +159,9 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... homeworks"
 	@echo "... edit_cache"
-	@echo "... homeworks/08_hard/08_hard_v2.o"
-	@echo "... homeworks/08_hard/08_hard_v2.i"
-	@echo "... homeworks/08_hard/08_hard_v2.s"
+	@echo "... homeworks/06_hard/06_hard_v1-for_review.o"
+	@echo "... homeworks/06_hard/06_hard_v1-for_review.i"
+	@echo "... homeworks/06_hard/06_hard_v1-for_review.s"
 .PHONY : help
 
 
