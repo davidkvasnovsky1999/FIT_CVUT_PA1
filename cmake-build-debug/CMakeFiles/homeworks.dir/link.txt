@@ -1,1 +1,1 @@
-/usr/bin/cc -g   CMakeFiles/homeworks.dir/homeworks/06_hard/06_hard_v1-for_review.c.o  -o homeworks  -lm 
+/usr/bin/cc -g   CMakeFiles/homeworks.dir/homeworks/06/06_hard/06_hard_v1-for_review.c.o  -o homeworks -lm 
